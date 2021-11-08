@@ -45,6 +45,16 @@ class PointsController {
       ...point,
      });
   }
+
+  async index(request: Request, response: Response){  
+    const {city, uf} = request.query;
+
+    const points = await knex('points')
+    .where('city', String(city))
+    .where('uf', String(uf))
+    .distinct()
+    return response.json({points});
+  }
 }
 
 export default PointsController;
