@@ -12,7 +12,6 @@ routes.get('/', (request, response) => {
 });
 
 routes.get('/points/:id', pointsController.show);
-
-routes.post('/points', pointsController.post);
+routes.post('/points', pointsController.create);
 
 export default routes;

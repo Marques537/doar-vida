@@ -8,12 +8,12 @@ class PointsController {
     const point = await knex('points').where('id', id).first();
 
     if (!point) {
-      return response.status(400).json({ messase: 'Collection not found' })
+      return response.status(400).json({ message: 'Collection post not found' })
     }
     return response.json(point);
   }
 
-  async post(request: Request, response: Response) {
+  async create(request: Request, response: Response) {
     const {
       name,
       email,
@@ -26,7 +26,7 @@ class PointsController {
       number
     } = request.body;
 
-    await knex('points').insert({
+    const point = {
       image: 'no-image',
       name,
       email,
@@ -37,8 +37,13 @@ class PointsController {
       uf,
       street,
       number
-    });
-    return response.json({ sucess: true });
+    };
+    const insertedIds = await knex('points').insert(point); 
+    const point_id = insertedIds[0];
+    return response.json({ 
+      id: point_id,
+      ...point,
+     });
   }
 }
 
