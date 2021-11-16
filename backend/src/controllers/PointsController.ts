@@ -11,7 +11,7 @@ class PointsController {
       return response.status(400).json({ message: 'Collection post not found' })
     }
     return response.json(point);
-  }
+  };
 
   async create(request: Request, response: Response) {
     const {
@@ -44,7 +44,7 @@ class PointsController {
       id: point_id,
       ...point,
      });
-  }
+  };
 
   async index(request: Request, response: Response){  
     const {city, uf} = request.query;
@@ -54,7 +54,7 @@ class PointsController {
     .where('uf', String(uf))
     .distinct()
     return response.json({points});
-  }
-}
+  };
+};
 
 export default PointsController;
