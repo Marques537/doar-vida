@@ -22,7 +22,7 @@ routes.get('/points', pointsController.index);
 routes.post('/schedule',scheduleController.create);
 routes.get('/schedule/:user_id',scheduleController.showAll);
 routes.get('/schedules',scheduleController.showByDate);
-routes.post('/user', userController.create);
+routes.post('/user', userController.create);// fazer autenticação, token
 routes.post('/donation', donationController.create);
 routes.get('/donations/:user_id', donationController.show);
 
