@@ -1,8 +1,9 @@
-import express, { request, response } from 'express';
+import express from 'express';
 import PointsController from './controllers/PointsController';
 import ScheduleController from './controllers/ScheculesController';
 import UserController from './controllers/UserController';
 import DonationController from './controllers/DonationController';
+import Authenticate from './controllers/AuthController'
 
 const routes = express.Router();
 const pointsController = new PointsController();
@@ -10,20 +11,15 @@ const scheduleController = new ScheduleController();
 const userController = new UserController();
 const donationController = new DonationController();
 
-routes.get('/', (request, response) => {
-  return response.json({
-    message: 'Hello World'
-  });
-});
-
-routes.get('/points/:id', pointsController.show);
-routes.post('/points', pointsController.create);
-routes.get('/points', pointsController.index);
-routes.post('/schedule',scheduleController.create);
-routes.get('/schedule/:user_id',scheduleController.showAll);
-routes.get('/schedules',scheduleController.showByDate);
-routes.post('/user', userController.create);// fazer autenticação, token
-routes.post('/donation', donationController.create);
-routes.get('/donations/:user_id', donationController.show);
+routes.get('/points/:id', Authenticate.ensureAuthenticated, pointsController.show);
+routes.post('/points', Authenticate.ensureAuthenticated,pointsController.create);
+routes.get('/points', Authenticate.ensureAuthenticated,pointsController.index);
+routes.post('/schedule', Authenticate.ensureAuthenticated,scheduleController.create);
+routes.get('/schedule/:user_id', Authenticate.ensureAuthenticated, scheduleController.showAll);
+routes.get('/schedules', Authenticate.ensureAuthenticated, scheduleController.showByDate);
+routes.post('/user/sign', userController.login); 
+routes.post('/user', userController.create);
+routes.post('/donation', Authenticate.ensureAuthenticated, donationController.create);
+routes.get('/donations/:user_id', Authenticate.ensureAuthenticated, donationController.show);
 
 export default routes;
