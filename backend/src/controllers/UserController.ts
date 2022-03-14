@@ -5,16 +5,20 @@ class UserController {
   async create(request: Request, response: Response){
     const {name, email, password} = request.body;
     const user = {name, email, password};
-
+    const selectedUser = await knex.select('id').
+      from<Object>('users')
+      .where('email', email)
+    if (selectedUser.length > 0 ){
+      return response.status(200).json({message: 'E-mail já utilizado.'});
+    }
   try{
     const insertedIds = await knex('users').insert(user);
     const userId = insertedIds[0];
     return response.json({
-     userId,
-      ...user
+     userId
     });
   }
-  catch (error){
+  catch (error) {     
     return response.status(400).json({error});
   }
 
