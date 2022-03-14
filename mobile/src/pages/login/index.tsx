@@ -8,12 +8,18 @@ const Login = () => {
   const navigation = useNavigation();
 
   function navigateToHome(){
-    //  navigation.navigate('Login');
-
+    //faço o login
+    //armazeno o jwt e depois redireciono para a tela home
       navigation.reset({
         routes: [{ name: 'MainTab'}] as any
       })
     }
+
+  function navigateToRegister(){
+    //navegar para registro e manter o histórico da pilha
+    navigation.navigate("Register" as never);
+
+  }  
  
   const [offset] = useState(new Animated.ValueXY({x: 0, y: 90}));
   const [opacity] = useState(new Animated.Value(0)); 
@@ -90,14 +96,12 @@ const Login = () => {
      style={styles.input}
      placeholder="Email"
      autoCorrect={false}
-     onChangeText={() =>{}}
      />
      <TextInput
      secureTextEntry={true}
      style={styles.input} 
      placeholder="Senha"
      autoCorrect={false}
-     onChangeText={() =>{}}
      />
      
      <TouchableOpacity 
@@ -107,9 +111,10 @@ const Login = () => {
      </TouchableOpacity>
      
     <Text style={styles.description}>Não tem cadastro?</Text>
-    <TouchableOpacity style={styles.btnNewAccount}>
-      <Text style={styles.registerText}>Criar conta</Text>
-       
+    <TouchableOpacity 
+    onPress={navigateToRegister}
+    style={styles.btnNewAccount}>
+      <Text style={styles.registerText}>Criar conta</Text> 
     </TouchableOpacity>
 
    </Animated.View>
@@ -122,8 +127,7 @@ const styles = StyleSheet.create({
   background:{
     flex:1,
     alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#f0f0f5'
+    justifyContent: 'center'
   },
   
   containerLogo:{
