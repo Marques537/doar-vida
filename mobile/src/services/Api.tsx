@@ -1,6 +1,6 @@
 
 
-const BASE_API = 'http://172.28.206.30:3333';
+const BASE_API = 'http://172.19.200.21:3333';
 
 export default {
     checkToken: async (token: string) => {
@@ -16,7 +16,7 @@ export default {
         return json;
     },
     signIn: async (email: string, password: string) => {
-        const req = await fetch(`${BASE_API}/auth/login`, {
+        const req = await fetch(`${BASE_API}/user/sign`, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -24,11 +24,10 @@ export default {
             },
             body: JSON.stringify({email, password})
         });
-        const json = await req.json();        
+        const json = await req.json();     
         return json;
     },
-    signUp: async (name: string, email: string, password: string) => {
-        console.log("tentei");   
+    signUp: async (name: string, email: string, password: string) => {   
         const res = await fetch(`${BASE_API}/user`, {
             method: 'POST',
             headers: {

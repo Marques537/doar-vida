@@ -1,24 +1,30 @@
 import React, { useState, useEffect } from 'react';
+import { Alert } from 'react-native';
 import { View, Keyboard, Animated, StyleSheet, KeyboardAvoidingView, TextInput, TouchableOpacity, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import  Api  from '../../services/Api';
 
 
 const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   
   const navigation = useNavigation();
 
-  function navigateToHome(){
-    //faço o login
-    //armazeno o jwt e depois redireciono para a tela home
+  const navigateToHome = async () =>{
+    const response = await Api.signIn(email, password);
+    if (!response.auth){
+      return Alert.alert('Erro','Usuário ou senha inválidos', 
+        [{ text: "OK"}]);   
+    }
+    //gravar token no context e ir pra tela inicial do app.
       navigation.reset({
         routes: [{ name: 'MainTab'}] as any
       })
     }
 
   function navigateToRegister(){
-    //navegar para registro e manter o histórico da pilha
     navigation.navigate("Register" as never);
-
   }  
  
   const [offset] = useState(new Animated.ValueXY({x: 0, y: 90}));
@@ -95,11 +101,15 @@ const Login = () => {
      <TextInput 
      style={styles.input}
      placeholder="Email"
+     value={email}
+     onChangeText={setEmail}
      autoCorrect={false}
      />
      <TextInput
      secureTextEntry={true}
-     style={styles.input} 
+     style={styles.input}
+     value={password}
+     onChangeText={setPassword} 
      placeholder="Senha"
      autoCorrect={false}
      />

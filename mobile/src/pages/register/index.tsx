@@ -86,6 +86,11 @@ const Register = () => {
             style={styles.btnSubmit}>
             <Text style={styles.submitText}>Cadastrar</Text>
           </TouchableOpacity>
+          <TouchableOpacity 
+            onPress={handleNavigateBack}
+            style={styles.btnLogin}>
+            <Text style={styles.loginText}>Login</Text> 
+          </TouchableOpacity>
         </View>
       </ScrollView>  
     </KeyboardAvoidingView>
@@ -125,7 +130,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 7,
-    marginTop: 20,
+    marginTop: 30,
     
   },
   submitText: {
@@ -147,6 +152,22 @@ const styles = StyleSheet.create({
     fontFamily: 'Ubuntu_700Bold',
     marginBottom: 5,
     textAlign: 'center',
-  }
+  },
+  btnLogin:{
+    backgroundColor: 'white',
+    borderWidth: 1,
+    marginTop: 12,
+    borderColor: '#FD4872',
+    width: '100%',
+    height: 45,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 7,
+  },
+  loginText: {
+    color: '#6C6C80',
+    fontSize: 16,
+    fontFamily: 'Ubuntu_700Bold',
+  },
 });
 export default Register;
