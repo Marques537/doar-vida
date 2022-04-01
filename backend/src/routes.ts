@@ -1,11 +1,11 @@
-import express from 'express';
+import { Router } from 'express';
 import PointsController from './controllers/PointsController';
 import ScheduleController from './controllers/ScheculesController';
 import UserController from './controllers/UserController';
 import DonationController from './controllers/DonationController';
 import Authenticate from './controllers/AuthController'
 
-const routes = express.Router();
+const routes = Router();
 const pointsController = new PointsController();
 const scheduleController = new ScheduleController();
 const userController = new UserController();

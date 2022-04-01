@@ -35,11 +35,12 @@ class UserController {
       .where('email', email)
       .where('password', password)
 
+      console.log(userId);  
     if (userId.length > 0){
       const token =  Authenticate.getJWT(userId);
-      return response.status(200).json({auth: true, token});
+      return response.status(201).json({auth: true, token});
     } else {
-      return response.status(401).json({message: 'user or password is invalid.'}).end();
+      return response.status(401).json({auth: false, message: 'user or password is invalid.'}).end();
     }  
 
   }
