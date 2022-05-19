@@ -23,6 +23,7 @@ const Register = () => {
     if (name != '' && email != '' && password != ''){
       try{
         const response = await Api.signUp(name,email,password);
+        
         if (response.userId < 1 || response.userId === undefined){
           if (response.message != ''){
             return Alert.alert('Erro',response.message, 
@@ -33,6 +34,7 @@ const Register = () => {
         }
         handleNavigateBack();
       }catch(err){
+        console.log(err)
         Alert.alert('Erro','Ocorreu um erro na tentativa de cadastro. Tente novamente', 
         [{ text: "OK"}]);
       }      

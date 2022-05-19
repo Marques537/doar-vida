@@ -13,10 +13,11 @@ const Login = () => {
 
   const navigateToHome = async () =>{
     const response = await Api.signIn(email, password);
-    if (!response.auth){
-      return Alert.alert('Erro','Usuário ou senha inválidos', 
-        [{ text: "OK"}]);   
-    }
+   
+    // if (!response.auth){
+    //   return Alert.alert('Erro','Usuário ou senha inválidos', 
+    //     [{ text: "OK"}]);   
+    // }
     //gravar token no context e ir pra tela inicial do app.
       navigation.reset({
         routes: [{ name: 'MainTab'}] as any
