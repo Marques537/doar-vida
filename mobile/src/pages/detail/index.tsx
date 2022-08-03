@@ -25,7 +25,8 @@ const Detail = () => {
           <Text style={styles.addressContent}>Estado: São Paulo</Text>
         </View>
         <View style={styles.address}>
-          <Text style={styles.addressTitle}>Telefone: (12) 3127-8312</Text>
+          <Text style={styles.addressTitle}>Contato</Text>
+          <Text style={styles.addressContent}>Telefone: (12) 3127-8312</Text>
           <Text style={styles.addressContent}>Celular: (19) 99090-9090</Text>
         </View>
       </View>
