@@ -1,6 +1,4 @@
-
-
-const BASE_API = 'http://172.19.200.21:3333';
+const BASE_API = 'http://172.27.107.177:3333'
 
 export default {
     checkToken: async (token: string) => {
@@ -28,6 +26,7 @@ export default {
         return json;
     },
     signUp: async (name: string, email: string, password: string) => {   
+
         const res = await fetch(`${BASE_API}/user`, {
             method: 'POST',
             headers: {
