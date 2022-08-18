@@ -1,6 +1,4 @@
 import { Request, Response } from "express";
-import knex from "../database/connection";
-import Authenticate from "../auth/AuthController";
 import { UserServiceImpl } from "./user.service";
 import { container } from "tsyringe";
 import { CustomError } from "../../shared/CustomError";
@@ -21,30 +19,27 @@ class UserController {
     }
   }
   async login(request: Request, response: Response) {
+    const userService = container.resolve(UserServiceImpl);
     const { email, password } = request.body;
 
-    if (email === undefined || password === undefined) {
+    if (!email || !password) {
       return response
         .status(400)
         .json({ message: "user or password not provided." });
     }
 
-    const userId = await knex
-      .select("id")
-      .from<Object>("users")
-      .where("email", email)
-      .where("password", password);
+    const loginAtempt = await userService.login({ email, password });
 
-    if (userId.length > 0) {
-      const token = Authenticate.getJWT(userId);
-      return response.status(201).json({ auth: true, token });
+    if (loginAtempt.auth) {
+      return response
+        .status(201)
+        .json({ auth: loginAtempt.auth, token: loginAtempt.token });
     } else {
       return response
         .status(401)
-        .json({ auth: false, message: "user or password is invalid." })
+        .json({ auth: loginAtempt.auth, message: loginAtempt.message })
         .end();
     }
   }
 }
-
 export default UserController;

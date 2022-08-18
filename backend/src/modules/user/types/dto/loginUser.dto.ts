@@ -1,5 +1,10 @@
 export interface LoginUserDTO {
-  auth: Boolean;
+  email: string;
+  password: string;
+}
+
+export interface LoginUserResponse {
+  auth: boolean;
   message?: string;
   token?: string;
 }
