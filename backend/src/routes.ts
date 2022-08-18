@@ -1,6 +1,6 @@
 import { Router } from "express";
 import PointsController from "./modules/points/PointsController";
-import ScheduleController from "./modules/schedules/ScheculesController";
+import ScheduleController from "./modules/schedules/schedules.controller";
 import DonationController from "./modules/donation/DonationController";
 import Authenticate from "./modules/auth/AuthController";
 import { container } from "tsyringe";
@@ -8,7 +8,7 @@ import UserController from "./modules/user/user.controller";
 
 const routes = Router();
 const pointsController = new PointsController();
-const scheduleController = new ScheduleController();
+const scheduleController = container.resolve(ScheduleController);
 const userController = container.resolve(UserController);
 const donationController = new DonationController();
 
