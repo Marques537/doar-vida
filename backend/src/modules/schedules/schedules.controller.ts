@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { container } from "tsyringe";
-import knex from "../database/connection";
 import { ScheduleServiceImpl } from "./schedules.service";
+import { Schedule } from "./types/schedule.interface";
 
 class ScheduleController {
   async showAll(request: Request, response: Response) {
@@ -14,15 +14,21 @@ class ScheduleController {
     return response.json({ schedules });
   }
   async showByDate(request: Request, response: Response) {
+    const scheduleService = container.resolve(ScheduleServiceImpl);
     const { user_id, date } = request.query;
-    const schedules = await knex("schedules")
-      .where("user_id", String(user_id))
-      .where("date", ">", String(date));
+    if (!user_id || !date) {
+      return response.status(400);
+    }
 
+    const schedules = await scheduleService.showByDate(
+      String(user_id),
+      String(date)
+    );
     return response.json({ schedules });
   }
 
   async create(request: Request, response: Response) {
+    const scheduleService = container.resolve(ScheduleServiceImpl);
     const { user_id, point_id, date, description } = request.body;
 
     const schedule = {
@@ -31,10 +37,12 @@ class ScheduleController {
       date,
       description,
     };
-    const insertedIds = await knex("schedules").insert(schedule);
-    const scheduleId = insertedIds[0];
+    const insertedIds = await scheduleService.createSchedule(
+      schedule as Schedule
+    );
+    const id = insertedIds[0];
     return response.json({
-      scheduleId,
+      id,
       ...schedule,
     });
   }
