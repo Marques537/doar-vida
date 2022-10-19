@@ -1,10 +1,14 @@
 import { Request, Response } from "express";
+import { container } from "tsyringe";
+import { CustomError } from "../../shared/CustomError";
 import knex from "../database/connection";
+import { PointServiceImpl } from "./points.service";
 
 class PointsController {
   async show(request: Request, response: Response) {
+    const pointService = container.resolve(PointServiceImpl);
     const { id } = request.params;
-    const point = await knex("points").where("id", id).first();
+    const point = await pointService.showById(id);
 
     if (!point) {
       return response
@@ -15,6 +19,7 @@ class PointsController {
   }
 
   async create(request: Request, response: Response) {
+    const pointService = container.resolve(PointServiceImpl);
     const {
       name,
       email,
@@ -56,21 +61,27 @@ class PointsController {
         .status(400)
         .json({ message: "another property is not provided" });
     }
-    const insertedIds = await knex("points").insert(point);
-    const point_id = insertedIds[0];
+
+    const pointId = await pointService.createPoint(point);
+    if (pointId instanceof CustomError) {
+      return response.status(400).json(pointId);
+    }
     return response.json({
-      id: point_id,
+      id: pointId,
       ...point,
     });
   }
 
   async index(request: Request, response: Response) {
+    const pointService = container.resolve(PointServiceImpl);
     const { city, uf } = request.query;
 
-    const points = await knex("points")
-      .where("city", String(city))
-      .where("uf", String(uf))
-      .distinct();
+    const location = {
+      city: String(city),
+      uf: String(uf),
+    };
+
+    const points = await pointService.findPointsByUFAndCity(location);
     return response.json({ points });
   }
 }

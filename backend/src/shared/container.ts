@@ -1,4 +1,8 @@
 import { container } from "tsyringe";
+import {
+  PointRepository,
+  PointRepositoryImpl,
+} from "../modules/points/points.repository";
 import ScheduleController from "../modules/schedules/schedules.controller";
 import {
   ScheduleRepository,
@@ -24,6 +28,12 @@ container.registerSingleton<ScheduleController>(
 container.registerSingleton<UserRepository>(
   "UserRepository",
   UserRepositoryImpl
+);
+
+//PointsController
+container.registerSingleton<PointRepository>(
+  "PointRepository",
+  PointRepositoryImpl
 );
 
 container.registerSingleton<UserController>("UserController", UserController);
