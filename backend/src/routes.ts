@@ -1,5 +1,5 @@
 import { Router } from "express";
-import PointsController from "./modules/points/PointsController";
+import PointsController from "./modules/points/points.controller";
 import ScheduleController from "./modules/schedules/schedules.controller";
 import DonationController from "./modules/donation/DonationController";
 import Authenticate from "./modules/auth/AuthController";
