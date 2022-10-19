@@ -1,7 +1,7 @@
 import { Router } from "express";
 import PointsController from "./modules/points/points.controller";
 import ScheduleController from "./modules/schedules/schedules.controller";
-import DonationController from "./modules/donation/DonationController";
+import DonationController from "./modules/donation/donation.controller";
 import Authenticate from "./modules/auth/AuthController";
 import { container } from "tsyringe";
 import UserController from "./modules/user/user.controller";
@@ -46,7 +46,7 @@ routes.post(
   donationController.create
 );
 routes.get(
-  "/donations/:user_id",
+  "/donations/:userId",
   Authenticate.ensureAuthenticated,
   donationController.show
 );
