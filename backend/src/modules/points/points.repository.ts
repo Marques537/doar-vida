@@ -9,7 +9,7 @@ export interface PointRepository {
   findPointsByUFAndCity(location: FindPointsDto): Promise<Point[]>;
 }
 
-export class PointRepositoryImpl {
+export class PointRepositoryImpl implements PointRepository {
   async showById(pointId: string): Promise<Point> {
     return knex("points").where("id", pointId).first();
   }

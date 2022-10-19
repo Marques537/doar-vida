@@ -1,5 +1,9 @@
 import { container } from "tsyringe";
 import {
+  DonationRepository,
+  DonationRepositoryImpl,
+} from "../modules/donation/donation.repository";
+import {
   PointRepository,
   PointRepositoryImpl,
 } from "../modules/points/points.repository";
@@ -34,6 +38,12 @@ container.registerSingleton<UserRepository>(
 container.registerSingleton<PointRepository>(
   "PointRepository",
   PointRepositoryImpl
+);
+
+//Donation
+container.registerSingleton<DonationRepository>(
+  "DonationRepository",
+  DonationRepositoryImpl
 );
 
 container.registerSingleton<UserController>("UserController", UserController);

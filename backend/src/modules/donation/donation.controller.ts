@@ -1,21 +1,24 @@
 import { Request, Response } from "express";
-import knex from "../database/connection";
+import { container } from "tsyringe";
+import { DonationServiceImpl } from "./donation.service";
 
 class DonationController {
   async create(request: Request, response: Response) {
+    const donationService = container.resolve(DonationServiceImpl);
     const { user_id, date, local } = request.body;
     const donation = { user_id, date, local };
 
-    const insertedID = await knex("donation").insert(donation);
-    const donation_id = insertedID[0];
+    const donation_id = await donationService.createDonation(donation);
     return response.json({
       donation_id,
       ...donation,
     });
   }
   async show(request: Request, response: Response) {
-    const { user_id } = request.params;
-    const donations = await knex("donation").where("user_id", user_id);
+    const donationService = container.resolve(DonationServiceImpl);
+    const { userId } = request.params;
+
+    const donations = await donationService.showByUserId(userId);
     return response.json({ donations });
   }
 }
