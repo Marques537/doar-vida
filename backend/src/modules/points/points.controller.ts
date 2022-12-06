@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { container } from "tsyringe";
 import { CustomError } from "../../shared/CustomError";
-import knex from "../database/connection";
 import { PointServiceImpl } from "./points.service";
 
 class PointsController {
