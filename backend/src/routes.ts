@@ -7,10 +7,10 @@ import { container } from "tsyringe";
 import UserController from "./modules/user/user.controller";
 
 const routes = Router();
-const pointsController = new PointsController();
+const pointsController = container.resolve(PointsController);
 const scheduleController = container.resolve(ScheduleController);
 const userController = container.resolve(UserController);
-const donationController = new DonationController();
+const donationController = container.resolve(DonationController);
 
 routes.get(
   "/points/:id",

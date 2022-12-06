@@ -1,8 +1,10 @@
 import { container } from "tsyringe";
+import DonationController from "../modules/donation/donation.controller";
 import {
   DonationRepository,
   DonationRepositoryImpl,
 } from "../modules/donation/donation.repository";
+import PointsController from "../modules/points/points.controller";
 import {
   PointRepository,
   PointRepositoryImpl,
@@ -33,17 +35,23 @@ container.registerSingleton<UserRepository>(
   "UserRepository",
   UserRepositoryImpl
 );
+container.registerSingleton<UserController>("UserController", UserController);
 
 //PointsController
 container.registerSingleton<PointRepository>(
   "PointRepository",
   PointRepositoryImpl
 );
-
+container.registerSingleton<PointsController>(
+  "PointsController",
+  PointsController
+);
 //Donation
+container.registerSingleton<DonationController>(
+  "DonationController",
+  DonationController
+);
 container.registerSingleton<DonationRepository>(
   "DonationRepository",
   DonationRepositoryImpl
 );
-
-container.registerSingleton<UserController>("UserController", UserController);
