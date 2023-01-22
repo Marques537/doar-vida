@@ -101,6 +101,7 @@ const Login = () => {
         <TextInput 
           style={styles.input}
           placeholder="Email"
+          placeholderTextColor="#6C6C80" 
           value={email}
           onChangeText={setEmail}
           autoCorrect={false}
@@ -111,6 +112,7 @@ const Login = () => {
           value={password}
           onChangeText={setPassword} 
           placeholder="Senha"
+          placeholderTextColor="#6C6C80" 
           autoCorrect={false}
         />
       
@@ -160,7 +162,7 @@ const styles = StyleSheet.create({
     color: '#222',
     fontSize: 17,
     borderRadius: 7,
-    paddingLeft: 10
+    paddingLeft: 10,
   },
 
   btnSubmit: {

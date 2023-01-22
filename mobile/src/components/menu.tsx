@@ -17,12 +17,13 @@ export default function MainTab(){
       screenOptions={{
         tabBarStyle: {
           backgroundColor: 'white',
-          paddingBottom: 5,
+          paddingBottom: 20,
           paddingTop: 5,
         },
         headerShown: false,
         tabBarActiveTintColor: '#FD4872',
         tabBarInactiveTintColor: '#6C6C80',
+
       }}
     >
       <Tab.Screen 

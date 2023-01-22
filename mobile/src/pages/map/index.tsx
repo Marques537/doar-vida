@@ -20,7 +20,7 @@ const Points = () => {
   return (
     <View style={styles.container}>
 
-      <Text style={styles.description}>Olá, encontre no mapa pontos de coleta!</Text>
+      <Text style={styles.description}>Olá, encontre no mapa postos de coleta de sangue!</Text>
       <View style={styles.mapContainer}>
         <MapView 
           style={styles.map}
