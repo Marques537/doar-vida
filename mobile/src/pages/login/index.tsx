@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Alert } from 'react-native';
 import { View, Keyboard, Animated, StyleSheet, KeyboardAvoidingView, TextInput, TouchableOpacity, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import  Api  from '../../services/Api';
+import  Api  from '../../services/backend-api';
 
 
 const Login = () => {
@@ -13,7 +13,6 @@ const Login = () => {
 
   const navigateToHome = async () =>{
     const response = await Api.signIn(email, password);
-   
     // if (!response.auth){
     //   return Alert.alert('Erro','Usuário ou senha inválidos', 
     //     [{ text: "OK"}]);   
@@ -82,54 +81,53 @@ const Login = () => {
 
   }, []);
   return (
- <KeyboardAvoidingView style={styles.background}>
-   <View style={styles.containerLogo}>
-    <Animated.Image 
-    style={{ width: logo.x, height: logo.y,}}
-    source={require('../../assets/logo.png')} />
-   </View>
+    <KeyboardAvoidingView style={styles.background}>
+      <View style={styles.containerLogo}>
+      <Animated.Image 
+        style={{ width: logo.x, height: logo.y,}}
+        source={require('../../assets/logo.png')} />
+      </View>
 
-   <Animated.View 
-   style={[
-     styles.container,
-     {
-      opacity: opacity, 
-      transform: [
-         { translateY: offset.y}
-       ]
-     }
-     ]}>
-     <TextInput 
-     style={styles.input}
-     placeholder="Email"
-     value={email}
-     onChangeText={setEmail}
-     autoCorrect={false}
-     />
-     <TextInput
-     secureTextEntry={true}
-     style={styles.input}
-     value={password}
-     onChangeText={setPassword} 
-     placeholder="Senha"
-     autoCorrect={false}
-     />
-     
-     <TouchableOpacity 
-     onPress={navigateToHome}
-     style={styles.btnSubmit}>
-       <Text style={styles.submitText}>Acessar</Text>
-     </TouchableOpacity>
-     
-    <Text style={styles.description}>Não tem cadastro?</Text>
-    <TouchableOpacity 
-    onPress={navigateToRegister}
-    style={styles.btnNewAccount}>
-      <Text style={styles.registerText}>Criar conta</Text> 
-    </TouchableOpacity>
-
-   </Animated.View>
- </KeyboardAvoidingView>
+      <Animated.View 
+        style={[
+          styles.container,
+          {
+            opacity: opacity, 
+            transform: [
+              { translateY: offset.y}
+            ]
+          }
+        ]}>
+        <TextInput 
+          style={styles.input}
+          placeholder="Email"
+          value={email}
+          onChangeText={setEmail}
+          autoCorrect={false}
+        />
+        <TextInput
+          secureTextEntry={true}
+          style={styles.input}
+          value={password}
+          onChangeText={setPassword} 
+          placeholder="Senha"
+          autoCorrect={false}
+        />
+      
+        <TouchableOpacity 
+          onPress={navigateToHome}
+          style={styles.btnSubmit}>
+          <Text style={styles.submitText}>Acessar</Text>
+        </TouchableOpacity>
+      
+        <Text style={styles.description}>Não tem cadastro?</Text>
+        <TouchableOpacity 
+          onPress={navigateToRegister}
+          style={styles.btnNewAccount}>
+          <Text style={styles.registerText}>Criar conta</Text> 
+        </TouchableOpacity>
+      </Animated.View>
+    </KeyboardAvoidingView>
   );
 };
 
