@@ -4,10 +4,17 @@ import Constants from 'expo-constants';
 import StepIndicator from 'react-native-step-indicator';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Feather as Icon } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+
 
 
 
 export default function App(){
+  
+const navigation = useNavigation();
+  function handleNavigateToRegisterReminder(){
+    navigation.navigate('RegisterReminder' as never);
+  }
   return (
     <>
       <View style={styles.containerHeader}>
@@ -20,8 +27,8 @@ export default function App(){
           horizontal 
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={{paddingHorizontal: 20}}>
-          <TouchableOpacity style={styles.item} onPress={()=>{}}>
-            <Text style={styles.textItem}>Registrar lembrete</Text>
+          <TouchableOpacity style={styles.item} onPress={handleNavigateToRegisterReminder}>
+            <Text style={styles.textItem}>Criar lembrete</Text>
             <Icon name='bell' color='#FD4872'size={24}/>
           </TouchableOpacity>
 

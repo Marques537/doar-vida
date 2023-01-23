@@ -5,6 +5,7 @@ import { Entypo, Feather } from '@expo/vector-icons';
 import Home from '../pages/home';
 import Profile from '../pages/profile';
 import Map from '../pages/map';
+import { Platform } from 'react-native';
 
 
 const Tab = createBottomTabNavigator();
@@ -17,7 +18,7 @@ export default function MainTab(){
       screenOptions={{
         tabBarStyle: {
           backgroundColor: 'white',
-          paddingBottom: 20,
+          paddingBottom: Platform.OS === 'ios' ? 20 : 2, 
           paddingTop: 5,
         },
         headerShown: false,

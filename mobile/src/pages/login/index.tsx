@@ -12,7 +12,7 @@ const Login = () => {
   const navigation = useNavigation();
 
   const navigateToHome = async () =>{
-    const response = await Api.signIn(email, password);
+    // const response = await Api.signIn(email, password);
     // if (!response.auth){
     //   return Alert.alert('Erro','Usuário ou senha inválidos', 
     //     [{ text: "OK"}]);   
