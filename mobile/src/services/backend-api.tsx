@@ -1,4 +1,4 @@
-const BASE_API = 'http://172.27.107.177:3333'
+const BASE_API = 'http://172.19.217.145:3333'
 
 export default {
     checkToken: async (token: string) => {

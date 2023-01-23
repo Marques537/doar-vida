@@ -3,7 +3,7 @@ import { Alert } from 'react-native';
 import { StyleSheet, KeyboardAvoidingView, TextInput, TouchableOpacity, Text, ScrollView, View } from 'react-native';
 import { Feather as Icon } from '@expo/vector-icons';
 import { useNavigation  } from '@react-navigation/native';
-import  Api  from '../../services/Api';
+import  Api  from '../../services/backend-api';
 
 const Register = () => {
   const [name, setName] = useState("");

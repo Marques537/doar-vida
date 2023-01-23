@@ -26,7 +26,6 @@ if (!fontsLoaded){
       </NavigationContainer>
       
     </>
-    
   );
 }
 
