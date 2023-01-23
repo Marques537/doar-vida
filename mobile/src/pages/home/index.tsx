@@ -29,17 +29,33 @@ const navigation = useNavigation();
           contentContainerStyle={{paddingHorizontal: 20}}>
           <TouchableOpacity style={styles.item} onPress={handleNavigateToRegisterReminder}>
             <Text style={styles.textItem}>Criar lembrete</Text>
-            <Icon name='bell' color='#FD4872'size={24}/>
+            <View style={styles.icons}>
+              <Icon name='plus' color='#FD4872'size={23}/>
+              <Icon name='bell' color='#FD4872'size={24}/>
+            </View>
+            
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.item} onPress={()=>{}}>
             <Text style={styles.textItem}>Registrar doação</Text>
-            <Icon name='droplet' color='#FD4872' size={24} />
+            <View style={styles.icons}>
+              <Icon name='plus' color='#FD4872'size={23}/>
+              <Icon name='droplet' color='#FD4872' size={24} />
+            </View>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.item} onPress={()=>{}}>
             <Text style={styles.textItem}>Histórico de doações</Text>
             <Icon name='archive' color='#FD4872' size={24} />
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.item} onPress={()=>{}}>
+            <Text style={styles.textItem}>Lembretes</Text>
+            <View style={styles.icons}>
+              <Icon style={{transform: [{rotateZ: '15deg'}]}} name='bell' color='#FD4872'size={22}/>
+              <Icon name='bell' color='#FD4872'size={24}/> 
+              <Icon style={{transform: [{rotateZ: '-15deg'}]}} name='bell' color='#FD4872'size={22}/>
+            </View>
           </TouchableOpacity>
         </ScrollView>
 
@@ -94,6 +110,10 @@ const styles = StyleSheet.create({
   },
   container: {
     paddingHorizontal: 32,
+  },
+  icons: {
+    flexDirection: 'row',
+    rotate: '30deg'
   },
   description: {
     color: '#6C6C80',
