@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Feather as Icon } from "@expo/vector-icons";
+import { Feather as Icon, FontAwesome } from "@expo/vector-icons";
 import {
   View,
   StyleSheet,
@@ -12,11 +12,10 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { RectButton } from "react-native-gesture-handler";
 import Constants from "expo-constants";
-const RegisterReminder = () => {
-  const [date, setDate] = useState("");
-  const [time, setTime] = useState("");
-  const [place, setPlace] = useState("");
-  const [description, setDescription] = useState("");
+const ChangePassword = () => {
+  const [oldPassword, setOldPassword] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const navigation = useNavigation();
   const handleNavigateBack = () => {
@@ -28,48 +27,40 @@ const RegisterReminder = () => {
         <TouchableOpacity onPress={handleNavigateBack}>
           <Icon name="arrow-left" size={23} color={"#FD4872"} />
         </TouchableOpacity>
-        <Text style={styles.title}>Criar lembrete</Text>
-        <Text style={styles.description}>
-          Faça o agendamento no posto de coleta e adicione aqui um lembrete para
-          não esquecer a data
-        </Text>
+        <Text style={styles.title}>Alteração de senha</Text>
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
-          <Text style={styles.description}>Data</Text>
+          <Text style={styles.description}>Senha antiga</Text>
           <TextInput
             style={styles.input}
             autoCorrect={false}
-            value={date}
-            onChangeText={setDate}
+            value={oldPassword}
+            onChangeText={setOldPassword}
           />
 
-          <Text style={styles.description}>Local</Text>
+          <Text style={styles.description}>Nova senha</Text>
+          <TextInput
+            style={styles.input}
+            autoCorrect={false}
+            value={password}
+            onChangeText={setPassword}
+          />
+
+          <Text style={styles.description}>Confirmação da nova senha</Text>
           <TextInput
             multiline
             style={styles.input}
             autoCorrect={false}
-            value={place}
-            onChangeText={setPlace}
-          />
-
-          <Text style={styles.description}>Descrição</Text>
-          <TextInput
-            multiline
-            style={styles.input}
-            autoCorrect={false}
-            value={description}
-            onChangeText={setDescription}
+            value={confirmPassword}
+            onChangeText={setConfirmPassword}
           />
         </View>
       </ScrollView>
       <View style={styles.footer}>
-        <Text style={styles.description}>
-          Fique tranquilo vamos te lembrar quando a data estiver próxima!
-        </Text>
         <RectButton style={styles.button} onPress={() => {}}>
-          <Text style={styles.buttonText}>Registrar</Text>
+          <Text style={styles.buttonText}>Alterar</Text>
         </RectButton>
       </View>
     </View>
@@ -98,6 +89,7 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     paddingHorizontal: 32,
     justifyContent: "space-between",
+    flexDirection: "row",
   },
 
   button: {
@@ -134,4 +126,4 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
   },
 });
-export default RegisterReminder;
+export default ChangePassword;
