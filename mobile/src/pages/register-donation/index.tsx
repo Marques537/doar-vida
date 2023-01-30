@@ -1,22 +1,23 @@
 import React, { useState } from "react";
-import { Feather as Icon } from "@expo/vector-icons";
+import { Feather as Icon, FontAwesome } from "@expo/vector-icons";
 import {
   View,
   StyleSheet,
   TouchableOpacity,
+  Image,
   Text,
+  SafeAreaView,
   Platform,
   TextInput,
   ScrollView,
+  KeyboardAvoidingView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { RectButton } from "react-native-gesture-handler";
 import Constants from "expo-constants";
-const RegisterReminder = () => {
+const RegisterDonation = () => {
   const [date, setDate] = useState("");
-  const [time, setTime] = useState("");
   const [place, setPlace] = useState("");
-  const [description, setDescription] = useState("");
 
   const navigation = useNavigation();
   const handleNavigateBack = () => {
@@ -28,10 +29,9 @@ const RegisterReminder = () => {
         <TouchableOpacity onPress={handleNavigateBack}>
           <Icon name="arrow-left" size={23} color={"#FD4872"} />
         </TouchableOpacity>
-        <Text style={styles.title}>Criar lembrete</Text>
+        <Text style={styles.title}>Registrar doação</Text>
         <Text style={styles.description}>
-          Faça o agendamento no posto de coleta e adicione aqui um lembrete para
-          não esquecer a data
+          Registre as doações que você já fez!
         </Text>
       </View>
 
@@ -53,21 +53,9 @@ const RegisterReminder = () => {
             value={place}
             onChangeText={setPlace}
           />
-
-          <Text style={styles.description}>Descrição</Text>
-          <TextInput
-            multiline
-            style={styles.input}
-            autoCorrect={false}
-            value={description}
-            onChangeText={setDescription}
-          />
         </View>
       </ScrollView>
       <View style={styles.footer}>
-        <Text style={styles.description}>
-          Fique tranquilo vamos te lembrar quando a data estiver próxima!
-        </Text>
         <RectButton style={styles.button} onPress={() => {}}>
           <Text style={styles.buttonText}>Registrar</Text>
         </RectButton>
@@ -98,6 +86,7 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     paddingHorizontal: 32,
     justifyContent: "space-between",
+    flexDirection: "row",
   },
 
   button: {
@@ -134,4 +123,4 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
   },
 });
-export default RegisterReminder;
+export default RegisterDonation;
