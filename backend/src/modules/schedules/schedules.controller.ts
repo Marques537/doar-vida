@@ -1,7 +1,7 @@
-import { Request, Response } from "express";
-import { container } from "tsyringe";
-import { ScheduleServiceImpl } from "./schedules.service";
-import { Schedule } from "./types/schedule.interface";
+import { Request, Response } from 'express';
+import { container } from 'tsyringe';
+import { ScheduleServiceImpl } from './schedules.service';
+import { Schedule } from './types/schedule.interface';
 
 class ScheduleController {
   async showAll(request: Request, response: Response) {
@@ -10,7 +10,6 @@ class ScheduleController {
     const { user_id } = request.params;
     const schedules = await scheduleService.showAll(user_id);
 
-    console.log(schedules);
     return response.json({ schedules });
   }
   async showByDate(request: Request, response: Response) {

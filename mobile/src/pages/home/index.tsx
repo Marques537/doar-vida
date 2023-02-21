@@ -1,29 +1,49 @@
-import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import Constants from "expo-constants";
-import StepIndicator from "react-native-step-indicator";
-import { ScrollView } from "react-native-gesture-handler";
-import { Feather as Icon } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import Constants from 'expo-constants';
+import StepIndicator from 'react-native-step-indicator';
+import { ScrollView } from 'react-native-gesture-handler';
+import { Feather as Icon } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import Api from '../../services/backend-api';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/store';
+
+interface User {
+  name: string;
+  email: string;
+}
 
 export default function Home() {
+  const { token, userId } = useSelector((state: RootState) => state.auth);
+  const [user, setUser] = useState<User>();
+  const [donations, setDonations] = useState();
+
   const navigation = useNavigation();
   function handleNavigateToRegisterReminder() {
-    navigation.navigate("RegisterReminder" as never);
+    console.log(user);
+    navigation.navigate('RegisterReminder' as never);
   }
   function handleNavigateToRegisterDonation() {
-    navigation.navigate("RegisterDonation" as never);
+    navigation.navigate('RegisterDonation' as never);
   }
   function handleNavigateToDonationHistory() {
-    navigation.navigate("DonationHistory" as never);
+    navigation.navigate('DonationHistory' as never);
   }
   function handleNavigateToReminders() {
-    navigation.navigate("Reminders" as never);
+    navigation.navigate('Reminders' as never);
   }
+
+  useEffect(() => {
+    Api.getUser(token, userId).then((response) => {
+      setUser(response);
+    });
+  }, []);
+
   return (
     <>
       <View style={styles.containerHeader}>
-        <Text style={styles.title}>Olá, Matheus</Text>
+        <Text style={styles.title}>Olá, {user?.name}</Text>
         <Text style={styles.description}>
           Faltam 10 dias para você poder doar sangue!
         </Text>
@@ -72,14 +92,14 @@ export default function Home() {
             <Text style={styles.textItem}>Lembretes</Text>
             <View style={styles.icons}>
               <Icon
-                style={{ transform: [{ rotateZ: "15deg" }] }}
+                style={{ transform: [{ rotateZ: '15deg' }] }}
                 name="bell"
                 color="#FD4872"
                 size={22}
               />
               <Icon name="bell" color="#FD4872" size={24} />
               <Icon
-                style={{ transform: [{ rotateZ: "-15deg" }] }}
+                style={{ transform: [{ rotateZ: '-15deg' }] }}
                 name="bell"
                 color="#FD4872"
                 size={22}
@@ -122,18 +142,18 @@ const stepIndicatorCustomStyles = {
   currentStepIndicatorSize: 50,
   separatorStrokeWidth: 5,
   currentStepStrokeWidth: 3,
-  stepStrokeCurrentColor: "#FD4872",
+  stepStrokeCurrentColor: '#FD4872',
   stepStrokeWidth: 3,
-  stepStrokeFinishedColor: "#FD4872",
-  stepStrokeUnFinishedColor: "#aaaaaa",
-  separatorFinishedColor: "#FD4872",
-  separatorUnFinishedColor: "#aaaaaa",
-  stepIndicatorFinishedColor: "#FD4872",
-  stepIndicatorUnFinishedColor: "#ffffff",
-  stepIndicatorCurrentColor: "#ffffff",
-  stepIndicatorLabelCurrentColor: "black",
-  stepIndicatorLabelFinishedColor: "#ffffff",
-  stepIndicatorLabelUnFinishedColor: "#aaaaaa",
+  stepStrokeFinishedColor: '#FD4872',
+  stepStrokeUnFinishedColor: '#aaaaaa',
+  separatorFinishedColor: '#FD4872',
+  separatorUnFinishedColor: '#aaaaaa',
+  stepIndicatorFinishedColor: '#FD4872',
+  stepIndicatorUnFinishedColor: '#ffffff',
+  stepIndicatorCurrentColor: '#ffffff',
+  stepIndicatorLabelCurrentColor: 'black',
+  stepIndicatorLabelFinishedColor: '#ffffff',
+  stepIndicatorLabelUnFinishedColor: '#aaaaaa',
 };
 const styles = StyleSheet.create({
   containerHeader: {
@@ -144,37 +164,37 @@ const styles = StyleSheet.create({
     paddingHorizontal: 32,
   },
   icons: {
-    flexDirection: "row",
-    rotate: "30deg",
+    flexDirection: 'row',
+    rotate: '30deg',
   },
   description: {
-    color: "#6C6C80",
+    color: '#6C6C80',
     fontSize: 16,
     marginTop: 4,
-    fontFamily: "Roboto_400Regular",
+    fontFamily: 'Roboto_400Regular',
   },
   view: {
     marginTop: 22,
   },
   title: {
-    color: "#322153",
-    fontFamily: "Roboto_500Medium",
+    color: '#322153',
+    fontFamily: 'Roboto_500Medium',
     fontSize: 16,
   },
   stepIndicator: {
-    color: "#322153",
-    fontFamily: "Roboto_500Medium",
+    color: '#322153',
+    fontFamily: 'Roboto_500Medium',
     fontSize: 16,
     marginBottom: 32,
   },
   itemsContainer: {
-    flexDirection: "row",
+    flexDirection: 'row',
     marginTop: 16,
   },
   item: {
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     borderWidth: 2,
-    borderColor: "#eee",
+    borderColor: '#eee',
     height: 110,
     width: 110,
     borderRadius: 8,
@@ -182,16 +202,16 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     paddingBottom: 16,
     marginRight: 8,
-    alignItems: "center",
-    justifyContent: "space-between",
-    textAlign: "center",
-    shadowColor: "rgba(0, 0, 0, 0.1)",
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    textAlign: 'center',
+    shadowColor: 'rgba(0, 0, 0, 0.1)',
     shadowOpacity: 0.8,
     elevation: 1.5,
   },
   textItem: {
-    color: "#322153",
-    fontFamily: "Roboto_400Regular",
+    color: '#322153',
+    fontFamily: 'Roboto_400Regular',
     fontSize: 14,
   },
 });

@@ -1,16 +1,25 @@
-import { useNavigation } from "@react-navigation/native";
-import Constants from "expo-constants";
-import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useNavigation } from '@react-navigation/native';
+import Constants from 'expo-constants';
+import React from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useDispatch } from 'react-redux';
+import { logout } from '../../reducers/auth.reducer';
 
 export default function Profile() {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   function handleNavigateToChangePassword() {
-    navigation.navigate("ChangePassword" as never);
+    navigation.navigate('ChangePassword' as never);
   }
   function handleNavigateToUpdateProfile() {
-    navigation.navigate("UpdateProfile" as never);
+    navigation.navigate('UpdateProfile' as never);
   }
+  const navigateToLogin = async () => {
+    dispatch(logout());
+    navigation.reset({
+      routes: [{ name: 'Login' }] as any,
+    });
+  };
   return (
     <>
       <View style={styles.containerHeader}>
@@ -39,7 +48,7 @@ export default function Profile() {
           Atualizar cadastro
         </Text>
         <Text style={styles.informationTitle}></Text>
-        <TouchableOpacity onPress={() => {}} style={styles.btnExit}>
+        <TouchableOpacity onPress={navigateToLogin} style={styles.btnExit}>
           <Text style={styles.exitText}>Sair</Text>
         </TouchableOpacity>
       </View>
@@ -55,40 +64,40 @@ const styles = StyleSheet.create({
   containerHeader: {
     paddingHorizontal: 32,
     paddingTop: 20 + Constants.statusBarHeight,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   title: {
-    color: "#322153",
-    fontFamily: "Roboto_500Medium",
+    color: '#322153',
+    fontFamily: 'Roboto_500Medium',
     fontSize: 18,
     marginTop: 5,
   },
   description: {
-    color: "#6C6C80",
+    color: '#6C6C80',
     fontSize: 16,
     marginBottom: 20,
-    fontFamily: "Roboto_400Regular",
+    fontFamily: 'Roboto_400Regular',
   },
   informationTitle: {
-    color: "#322153",
-    fontFamily: "Roboto_500Medium",
+    color: '#322153',
+    fontFamily: 'Roboto_500Medium',
     fontSize: 16,
     marginTop: 15,
   },
 
   btnExit: {
-    backgroundColor: "#FD4872",
-    width: "100%",
+    backgroundColor: '#FD4872',
+    width: '100%',
     height: 45,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     borderRadius: 7,
   },
 
   exitText: {
-    color: "#FFF",
+    color: '#FFF',
     fontSize: 18,
-    fontFamily: "Ubuntu_700Bold",
+    fontFamily: 'Ubuntu_700Bold',
   },
 });

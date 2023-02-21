@@ -7,4 +7,5 @@ export interface LoginUserResponse {
   auth: boolean;
   message?: string;
   token?: string;
+  id?: string;
 }
