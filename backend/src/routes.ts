@@ -1,10 +1,10 @@
-import { Router } from "express";
-import PointsController from "./modules/points/points.controller";
-import ScheduleController from "./modules/schedules/schedules.controller";
-import DonationController from "./modules/donation/donation.controller";
-import Authenticate from "./modules/auth/AuthController";
-import { container } from "tsyringe";
-import UserController from "./modules/user/user.controller";
+import { Router } from 'express';
+import PointsController from './modules/points/points.controller';
+import ScheduleController from './modules/schedules/schedules.controller';
+import DonationController from './modules/donation/donation.controller';
+import Authenticate from './modules/auth/AuthController';
+import { container } from 'tsyringe';
+import UserController from './modules/user/user.controller';
 
 const routes = Router();
 const pointsController = container.resolve(PointsController);
@@ -13,40 +13,46 @@ const userController = container.resolve(UserController);
 const donationController = container.resolve(DonationController);
 
 routes.get(
-  "/points/:id",
+  '/points/:id',
   Authenticate.ensureAuthenticated,
   pointsController.show
 );
 routes.post(
-  "/points",
+  '/points',
   Authenticate.ensureAuthenticated,
   pointsController.create
 );
-routes.get("/points", Authenticate.ensureAuthenticated, pointsController.index);
+routes.get('/points', Authenticate.ensureAuthenticated, pointsController.index);
 routes.post(
-  "/schedule",
+  '/schedule',
   Authenticate.ensureAuthenticated,
   scheduleController.create
 );
 routes.get(
-  "/schedule/:user_id",
+  '/schedule/:user_id',
   Authenticate.ensureAuthenticated,
   scheduleController.showAll
 );
 routes.get(
-  "/schedules",
+  '/schedules',
   Authenticate.ensureAuthenticated,
   scheduleController.showByDate
 );
-routes.post("/user/sign", userController.login);
-routes.post("/user", userController.create);
+routes.post('/user/sign', userController.login);
+routes.post('/user', userController.create);
+routes.get(
+  '/user/:userId',
+  Authenticate.ensureAuthenticated,
+  userController.getUser
+);
+
 routes.post(
-  "/donation",
+  '/donation',
   Authenticate.ensureAuthenticated,
   donationController.create
 );
 routes.get(
-  "/donations/:userId",
+  '/donations/:userId',
   Authenticate.ensureAuthenticated,
   donationController.show
 );
