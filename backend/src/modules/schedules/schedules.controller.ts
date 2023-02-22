@@ -28,13 +28,13 @@ class ScheduleController {
 
   async create(request: Request, response: Response) {
     const scheduleService = container.resolve(ScheduleServiceImpl);
-    const { user_id, point_id, date, description } = request.body;
+    const { user_id, local, date, description } = request.body;
 
     const schedule = {
       user_id,
-      point_id,
       date,
       description,
+      local,
     };
     const insertedIds = await scheduleService.createSchedule(
       schedule as Schedule

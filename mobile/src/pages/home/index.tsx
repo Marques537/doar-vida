@@ -9,14 +9,15 @@ import Api from '../../services/backend-api';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import moment from 'moment';
+import { DateFormat } from '../../enums/dates.enum';
 
 interface User {
   name: string;
   email: string;
   gender: string;
 }
-interface Donation {
-  donation_id: number;
+export interface Donation {
+  id: number;
   user_id: number;
   date: string;
   local: string;
@@ -61,7 +62,7 @@ export default function Home() {
     Api.getDonations(token, userId).then((response) => {
       setDonations(response.donations);
     });
-    Api.getScheduleByDate(token, userId, moment().format('YYYY-MM-DD')).then(
+    Api.getScheduleByDate(token, userId, moment().format(DateFormat.BR)).then(
       (response) => {
         setSchedules(response.schedules);
       }
@@ -71,7 +72,8 @@ export default function Home() {
   function donationStatus() {
     const maxDonationCount = user?.gender == Genders.MALE ? 4 : 3;
     return donations.filter(
-      (donation) => moment(donation.date) >= moment().add(-1, 'year')
+      (donation) =>
+        moment(donation.date, DateFormat.BR) >= moment().add(-1, 'year')
     ).length >= maxDonationCount ? (
       <Text style={styles.description}>
         Meta de doação dos últimos 12 meses atingida!
@@ -85,20 +87,24 @@ export default function Home() {
     const donationInterval = user?.gender == Genders.MALE ? 60 : 90;
 
     if (
-      donations.filter(
-        (donation) => moment(donation?.date) >= moment().add(-1, 'year')
+      donations?.filter(
+        (donation) =>
+          moment(donation?.date, DateFormat.BR) >= moment().add(-1, 'year')
       ).length >= maxDonationCount
     ) {
       return null;
     }
 
     donations?.sort((a, b) => {
-      return moment(a.date).diff(moment(b.date));
+      return moment(a.date, DateFormat.BR).diff(moment(b.date, DateFormat.BR));
     });
     const lastDonation = donations?.slice(-1);
 
     if (lastDonation.length) {
-      const days = moment().diff(moment(lastDonation[0]?.date), 'days');
+      const days = moment().diff(
+        moment(lastDonation[0]?.date, DateFormat.BR),
+        'days'
+      );
       return days > donationInterval ? (
         <Text style={styles.description}>Você poder doar sangue!</Text>
       ) : (
@@ -115,7 +121,9 @@ export default function Home() {
   return (
     <>
       <View style={styles.containerHeader}>
-        <Text style={styles.title}>Olá, {user?.name}</Text>
+        <Text style={styles.title}>
+          Olá, {user?.name?.split(' ').slice(0, -1).join(' ')}
+        </Text>
         {calculateTimeToDonate()}
       </View>
 
@@ -191,7 +199,7 @@ export default function Home() {
           <Text style={styles.title}>Próxima doação</Text>
           <Text style={styles.description}>
             {schedules[0]?.date
-              ? moment(schedules[0].date).format('DD/MM/YYYY')
+              ? moment(schedules[0]?.date, DateFormat.BR).format('DD/MM/yyyy')
               : 'Agendamento não registrado'}
           </Text>
         </View>
@@ -202,7 +210,9 @@ export default function Home() {
             customStyles={stepIndicatorCustomStyles}
             currentPosition={
               donations?.filter(
-                (donation) => moment(donation?.date) >= moment().add(-1, 'year')
+                (donation) =>
+                  moment(donation?.date, DateFormat.BR) >=
+                  moment().add(-1, 'year')
               ).length - 1
             }
             stepCount={user?.gender == Genders.MALE ? 4 : 3}

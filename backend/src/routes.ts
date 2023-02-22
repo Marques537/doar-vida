@@ -24,12 +24,12 @@ routes.post(
 );
 routes.get('/points', Authenticate.ensureAuthenticated, pointsController.index);
 routes.post(
-  '/schedule',
+  '/schedules',
   Authenticate.ensureAuthenticated,
   scheduleController.create
 );
 routes.get(
-  '/schedule/:user_id',
+  '/schedules/:user_id',
   Authenticate.ensureAuthenticated,
   scheduleController.showAll
 );

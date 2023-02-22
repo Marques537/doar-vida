@@ -1,4 +1,4 @@
-const BASE_API = 'http://172.25.108.114:3333';
+const BASE_API = 'http://172.24.45.121:3333';
 
 export default {
   checkToken: async (token: string) => {
@@ -88,15 +88,17 @@ export default {
     return json;
   },
 
-  // getBarbers: async (lat=null, lng=null, address=null) => {
-  //     const token = await AsyncStorage.getItem('token');
+  getSchedules: async (token: string, userId: string) => {
+    const res = await fetch(`${BASE_API}/schedules/${userId}`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'x-access-token': token,
+      },
+    });
+    const json = await res.json();
 
-  //     console.log("LAT", lat);
-  //     console.log("LNG", lng);
-  //     console.log("ADDRESS", address);
-
-  //     const req = await fetch(`${BASE_API}/barbers?token=${token}&lat=${lat}&lng=${lng}&address=${address}`);
-  //     const json = await req.json();
-  //     return json;
-  // }
+    return json;
+  },
 };
