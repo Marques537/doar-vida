@@ -52,7 +52,7 @@ export class UserServiceImpl implements UserService {
     const user = await this.userRepository.selectUserById(getUser.id);
 
     if (user) {
-      return { name: user.name, email: user.email };
+      return { name: user.name, email: user.email, gender: user.gender };
     } else {
       return { message: 'user not found.' };
     }

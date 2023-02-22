@@ -7,9 +7,14 @@ class UserController {
   async create(request: Request, response: Response): Promise<Response> {
     const userService = container.resolve(UserServiceImpl);
 
-    const { name, email, password } = request.body;
+    const { name, email, password, gender } = request.body;
     try {
-      const result = await userService.create({ name, email, password });
+      const result = await userService.create({
+        name,
+        email,
+        password,
+        gender,
+      });
       if (result instanceof CustomError) {
         return response.status(400).json(result);
       }

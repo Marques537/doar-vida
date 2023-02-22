@@ -9,10 +9,10 @@ export interface DonationRepository {
 
 export class DonationRepositoryImpl implements DonationRepository {
   async showByUserId(userId: string): Promise<Donation[]> {
-    return knex('donation').where('user_id', userId);
+    return knex('donations').where('user_id', userId);
   }
   async createDonation(donation: CreateDonationDto): Promise<number> {
-    const id = await knex('donation').insert(donation);
+    const id = await knex('donations').insert(donation);
     return id[0];
   }
 }

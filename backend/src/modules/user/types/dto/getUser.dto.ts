@@ -6,4 +6,5 @@ export interface GetUserResponse {
   name?: string;
   email?: string;
   message?: string;
+  gender?: string;
 }

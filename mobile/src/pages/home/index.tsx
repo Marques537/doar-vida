@@ -8,20 +8,40 @@ import { useNavigation } from '@react-navigation/native';
 import Api from '../../services/backend-api';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
+import moment from 'moment';
 
 interface User {
   name: string;
   email: string;
+  gender: string;
+}
+interface Donation {
+  donation_id: number;
+  user_id: number;
+  date: string;
+  local: string;
+}
+interface Schedule {
+  id: number;
+  user_id: number;
+  point_id: string;
+  date: string;
+  description: string;
+}
+
+enum Genders {
+  MALE = 'male',
+  FEMALE = 'female',
 }
 
 export default function Home() {
   const { token, userId } = useSelector((state: RootState) => state.auth);
   const [user, setUser] = useState<User>();
-  const [donations, setDonations] = useState();
+  const [donations, setDonations] = useState<Donation[]>([]);
+  const [schedules, setSchedules] = useState<Schedule[]>([]);
 
   const navigation = useNavigation();
   function handleNavigateToRegisterReminder() {
-    console.log(user);
     navigation.navigate('RegisterReminder' as never);
   }
   function handleNavigateToRegisterDonation() {
@@ -38,15 +58,65 @@ export default function Home() {
     Api.getUser(token, userId).then((response) => {
       setUser(response);
     });
+    Api.getDonations(token, userId).then((response) => {
+      setDonations(response.donations);
+    });
+    Api.getScheduleByDate(token, userId, moment().format('YYYY-MM-DD')).then(
+      (response) => {
+        setSchedules(response.schedules);
+      }
+    );
   }, []);
+
+  function donationStatus() {
+    const maxDonationCount = user?.gender == Genders.MALE ? 4 : 3;
+    return donations.filter(
+      (donation) => moment(donation.date) >= moment().add(-1, 'year')
+    ).length >= maxDonationCount ? (
+      <Text style={styles.description}>
+        Meta de doação dos últimos 12 meses atingida!
+      </Text>
+    ) : null;
+  }
+
+  function calculateTimeToDonate() {
+    //60 days for man and 90 for woman
+    const maxDonationCount = user?.gender == Genders.MALE ? 4 : 3;
+    const donationInterval = user?.gender == Genders.MALE ? 60 : 90;
+
+    if (
+      donations.filter(
+        (donation) => moment(donation?.date) >= moment().add(-1, 'year')
+      ).length >= maxDonationCount
+    ) {
+      return null;
+    }
+
+    donations?.sort((a, b) => {
+      return moment(a.date).diff(moment(b.date));
+    });
+    const lastDonation = donations?.slice(-1);
+
+    if (lastDonation.length) {
+      const days = moment().diff(moment(lastDonation[0]?.date), 'days');
+      return days > donationInterval ? (
+        <Text style={styles.description}>Você poder doar sangue!</Text>
+      ) : (
+        <Text style={styles.description}>
+          Faltam {donationInterval - days}
+          {donationInterval - days > 1 ? ' dias' : ' dia'} para você poder doar
+          sangue!
+        </Text>
+      );
+    }
+    return <Text style={styles.description}>Você poder doar sangue!</Text>;
+  }
 
   return (
     <>
       <View style={styles.containerHeader}>
         <Text style={styles.title}>Olá, {user?.name}</Text>
-        <Text style={styles.description}>
-          Faltam 10 dias para você poder doar sangue!
-        </Text>
+        {calculateTimeToDonate()}
       </View>
 
       <View style={styles.itemsContainer}>
@@ -111,26 +181,33 @@ export default function Home() {
       <View style={styles.container}>
         <View style={styles.view}>
           <Text style={styles.title}>Doações realizadas</Text>
-          <Text style={styles.description}>4</Text>
+          <Text style={styles.description}>{donations.length || 0}</Text>
           <Text style={styles.description}>
-            Você já impactou a vida de 30 pessoas!
+            Você já pode ter impactado na vida de {donations.length * 4 || 0}{' '}
+            pessoas!
           </Text>
         </View>
         <View style={styles.view}>
           <Text style={styles.title}>Próxima doação</Text>
-          <Text style={styles.description}>29/06/2022</Text>
+          <Text style={styles.description}>
+            {schedules[0]?.date
+              ? moment(schedules[0].date).format('DD/MM/YYYY')
+              : 'Agendamento não registrado'}
+          </Text>
         </View>
 
         <View style={styles.view}>
           <Text style={styles.stepIndicator}>Doações dos últimos 12 meses</Text>
           <StepIndicator
             customStyles={stepIndicatorCustomStyles}
-            currentPosition={4}
-            stepCount={5}
+            currentPosition={
+              donations?.filter(
+                (donation) => moment(donation?.date) >= moment().add(-1, 'year')
+              ).length - 1
+            }
+            stepCount={user?.gender == Genders.MALE ? 4 : 3}
           />
-          <Text style={styles.description}>
-            Meta de doação dos últimos 12 meses atingida!
-          </Text>
+          {donationStatus()}
         </View>
       </View>
     </>

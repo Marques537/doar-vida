@@ -1,4 +1,4 @@
-const BASE_API = 'http://172.29.159.172:3333';
+const BASE_API = 'http://172.25.108.114:3333';
 
 export default {
   checkToken: async (token: string) => {
@@ -40,7 +40,6 @@ export default {
   },
 
   getUser: async (token: string, userId: string) => {
-    console.log(token, userId);
     const res = await fetch(`${BASE_API}/user/${userId}`, {
       method: 'GET',
       headers: {
@@ -54,15 +53,36 @@ export default {
     return json;
   },
 
-  getDonations: async (name: string, email: string, password: string) => {
-    const res = await fetch(`${BASE_API}/donation/`, {
-      method: 'POST',
+  getDonations: async (token: string, userId: string) => {
+    const res = await fetch(`${BASE_API}/donations/${userId}`, {
+      method: 'GET',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
+        'x-access-token': token,
       },
-      body: JSON.stringify({ name, email, password }),
     });
+    const json = await res.json();
+
+    return json;
+  },
+
+  getScheduleByDate: async (token: string, userId: string, date: string) => {
+    const res = await fetch(
+      `${BASE_API}/schedules?` +
+        new URLSearchParams({
+          user_id: userId,
+          date: date,
+        }),
+      {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          'x-access-token': token,
+        },
+      }
+    );
     const json = await res.json();
 
     return json;
