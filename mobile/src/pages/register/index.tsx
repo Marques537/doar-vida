@@ -12,12 +12,19 @@ import {
 import { Feather as Icon } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import Api from '../../services/backend-api';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 const Register = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [repeatPassword, setRepeatPassword] = useState('');
+  const [open, setOpen] = useState(false);
+  const [gender, setGender] = useState('');
+  const [items, setItems] = useState([
+    { label: 'Homem', value: 'male' },
+    { label: 'Mulher', value: 'female' },
+  ]);
   const navigation = useNavigation();
 
   function handleNavigateBack() {
@@ -31,7 +38,7 @@ const Register = () => {
     }
     if (name != '' && email != '' && password != '') {
       try {
-        const response = await Api.signUp(name, email, password);
+        const response = await Api.signUp(name, email, password, gender);
 
         if (response.userId < 1 || response.userId === undefined) {
           if (response.message != '') {
@@ -87,6 +94,19 @@ const Register = () => {
             value={email}
             onChangeText={setEmail}
           />
+          <Text style={styles.description}>Gênero</Text>
+          <DropDownPicker
+            style={styles.input}
+            textStyle={{ fontFamily: 'Roboto_400Regular', fontSize: 16 }}
+            open={open}
+            value={gender}
+            items={items}
+            setOpen={setOpen}
+            setValue={setGender}
+            setItems={setItems}
+            language={'PT'}
+            placeholder={'selecione um gênero'}
+          />
           <Text style={styles.description}>Senha</Text>
           <TextInput
             secureTextEntry={true}
@@ -141,6 +161,7 @@ const styles = StyleSheet.create({
     fontSize: 17,
     borderRadius: 7,
     paddingLeft: 10,
+    borderWidth: 0,
   },
 
   btnSubmit: {

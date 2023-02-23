@@ -25,14 +25,19 @@ export default {
     const json = await req.json();
     return json;
   },
-  signUp: async (name: string, email: string, password: string) => {
+  signUp: async (
+    name: string,
+    email: string,
+    password: string,
+    gender: string
+  ) => {
     const res = await fetch(`${BASE_API}/user`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ name, email, password }),
+      body: JSON.stringify({ name, email, password, gender }),
     });
     const json = await res.json();
 
@@ -96,6 +101,26 @@ export default {
         'Content-Type': 'application/json',
         'x-access-token': token,
       },
+    });
+    const json = await res.json();
+
+    return json;
+  },
+
+  createDonation: async (
+    token: string,
+    userId: string,
+    date: string,
+    local: string
+  ) => {
+    const res = await fetch(`${BASE_API}/donation`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'x-access-token': token,
+      },
+      body: JSON.stringify({ user_id: userId, date, local }),
     });
     const json = await res.json();
 
