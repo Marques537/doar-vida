@@ -29,9 +29,6 @@ export default function Profile() {
         <Text style={styles.informationTitle}>Nome</Text>
         <Text style={styles.description}>Matheus Marques da Costa Silva</Text>
 
-        <Text style={styles.informationTitle}>Celular</Text>
-        <Text style={styles.description}>(19) 98326-6439</Text>
-
         <Text style={styles.informationTitle}>E-mail</Text>
         <Text style={styles.description}>matheusm537@gmail.com</Text>
 

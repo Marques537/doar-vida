@@ -39,14 +39,12 @@ const RegisterDonation = () => {
 
   const registerDonation = async () => {
     if (date != '' && place != '') {
-      console.log(date);
       const response = await Api.createDonation(
         token,
         userId,
         moment(date).format('YYYY/MM/DD'),
         place
       );
-      console.log(response);
       if (response.donation_id) {
         Alert.alert('Sucesso', 'Doação registrada', [{ text: 'OK' }]);
       } else {

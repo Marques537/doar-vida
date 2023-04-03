@@ -1,4 +1,4 @@
-const BASE_API = 'http://172.24.45.121:3333';
+const BASE_API = 'http://192.168.100.147:3333';
 
 export default {
   checkToken: async (token: string) => {
@@ -121,6 +121,42 @@ export default {
         'x-access-token': token,
       },
       body: JSON.stringify({ user_id: userId, date, local }),
+    });
+    const json = await res.json();
+
+    return json;
+  },
+
+  createReminder: async (
+    token: string,
+    userId: string,
+    date: string,
+    local: string,
+    description?: string
+  ) => {
+    const res = await fetch(`${BASE_API}/schedules`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'x-access-token': token,
+      },
+      body: JSON.stringify({ user_id: userId, date, local, description }),
+    });
+    const json = await res.json();
+
+    return json;
+  },
+
+  updateUserProfile: async (token: string, userId: string, name: string) => {
+    const res = await fetch(`${BASE_API}/user/update`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'x-access-token': token,
+      },
+      body: JSON.stringify({ id: userId, name }),
     });
     const json = await res.json();
 

@@ -118,12 +118,19 @@ export default function Home() {
     return <Text style={styles.description}>Você poder doar sangue!</Text>;
   }
 
+  function peopleHelpCount() {
+    return donations.length ? (
+      <Text style={styles.description}>
+        Você já pode ter impactado na vida de {donations.length * 4 || 0}{' '}
+        pessoas!
+      </Text>
+    ) : null;
+  }
+
   return (
     <>
       <View style={styles.containerHeader}>
-        <Text style={styles.title}>
-          Olá, {user?.name?.split(' ').slice(0, -1).join(' ')}
-        </Text>
+        <Text style={styles.title}>Olá, {user?.name?.split(' ')?.[0]}</Text>
         {calculateTimeToDonate()}
       </View>
 
@@ -190,10 +197,7 @@ export default function Home() {
         <View style={styles.view}>
           <Text style={styles.title}>Doações realizadas</Text>
           <Text style={styles.description}>{donations.length || 0}</Text>
-          <Text style={styles.description}>
-            Você já pode ter impactado na vida de {donations.length * 4 || 0}{' '}
-            pessoas!
-          </Text>
+          {peopleHelpCount}
         </View>
         <View style={styles.view}>
           <Text style={styles.title}>Próxima doação</Text>

@@ -22,8 +22,8 @@ const Register = () => {
   const [open, setOpen] = useState(false);
   const [gender, setGender] = useState('');
   const [items, setItems] = useState([
-    { label: 'Homem', value: 'male' },
-    { label: 'Mulher', value: 'female' },
+    { label: 'Masculino', value: 'male' },
+    { label: 'Feminino', value: 'female' },
   ]);
   const navigation = useNavigation();
 
