@@ -1,6 +1,6 @@
-import { inject, injectable } from "tsyringe";
-import { ScheduleRepository } from "./schedules.repository";
-import { Schedule } from "./types/schedule.interface";
+import { inject, injectable } from 'tsyringe';
+import { ScheduleRepository } from './schedules.repository';
+import { Schedule } from './types/schedule.interface';
 
 export interface ScheduleService {
   showAll(userId: string): Promise<Schedule[]>;
@@ -11,7 +11,7 @@ export interface ScheduleService {
 @injectable()
 export class ScheduleServiceImpl implements ScheduleService {
   constructor(
-    @inject("ScheduleRepository")
+    @inject('ScheduleRepository')
     private scheduleRepository: ScheduleRepository
   ) {}
 

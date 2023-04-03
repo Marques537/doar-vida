@@ -45,6 +45,11 @@ routes.get(
   Authenticate.ensureAuthenticated,
   userController.getUser
 );
+routes.post(
+  '/user/update',
+  Authenticate.ensureAuthenticated,
+  userController.updateUser
+);
 
 routes.post(
   '/donation',

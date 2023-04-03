@@ -4,6 +4,7 @@ import Authenticate from '../auth/AuthController';
 import { CreatedUserResponse, CreateUserDTO } from './types/dto/createUser.dto';
 import { GetUserDTO, GetUserResponse } from './types/dto/getUser.dto';
 import { LoginUserDTO, LoginUserResponse } from './types/dto/loginUser.dto';
+import { UpdateUserDto, UpdateUserResponse } from './types/dto/updateUser.dto';
 import { UserRepository } from './user.repository';
 
 export interface UserService {
@@ -53,6 +54,23 @@ export class UserServiceImpl implements UserService {
 
     if (user) {
       return { name: user.name, email: user.email, gender: user.gender };
+    } else {
+      return { message: 'user not found.' };
+    }
+  }
+  async updateUser(params: UpdateUserDto): Promise<UpdateUserResponse> {
+    const user = await this.userRepository.updateUserNameById(
+      params.userId,
+      params.name
+    );
+    if (user) {
+      const updatedUser = await this.getUser({ id: params.userId });
+
+      return {
+        name: updatedUser.name,
+        email: updatedUser.email,
+        gender: updatedUser.gender,
+      };
     } else {
       return { message: 'user not found.' };
     }

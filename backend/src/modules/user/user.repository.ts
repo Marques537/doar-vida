@@ -10,6 +10,7 @@ export interface UserRepository {
     password: string
   ): Promise<UserId>;
   selectUserById(userId: string): Promise<User>;
+  updateUserNameById(userId: string, name: string): Promise<User>;
 }
 export class UserRepositoryImpl implements UserRepository {
   async createUser(user: User): Promise<CreateUserDTO> {
@@ -31,5 +32,14 @@ export class UserRepositoryImpl implements UserRepository {
   }
   async selectUserById(userId: string): Promise<User> {
     return knex.select('').from<Object>('users').first().where('id', userId);
+  }
+
+  async updateUserNameById(userId: string, name: string): Promise<User> {
+    return knex('users').where('id', userId).update(
+      {
+        name,
+      },
+      ['name', 'email', 'gender']
+    );
   }
 }

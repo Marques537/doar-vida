@@ -64,5 +64,22 @@ class UserController {
       return response.status(401).json({ message: user.message }).end();
     }
   }
+
+  async updateUser(request: Request, response: Response) {
+    const userService = container.resolve(UserServiceImpl);
+    const { id, name } = request.body;
+
+    if (!id) {
+      return response.status(400).json({ message: 'userId not provided.' });
+    }
+
+    const user = await userService.updateUser({ userId: String(id), name });
+
+    if (user.name) {
+      return response.status(201).json(user);
+    } else {
+      return response.status(401).json({ message: user.message }).end();
+    }
+  }
 }
 export default UserController;
