@@ -16,7 +16,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import Api from '../../services/backend-api';
 import moment from 'moment';
-import { DateFormat } from '../../enums/dates.enum';
+import { DateTimeFormat } from '../../enums/dates.enum';
 
 interface Reminder {
   id: number;
@@ -37,8 +37,8 @@ const Reminders = () => {
   useEffect(() => {
     Api.getSchedules(token, userId).then((response) => {
       response.schedules?.sort((a: any, b: any) => {
-        return moment(b.date, DateFormat.BR).diff(
-          moment(a.date, DateFormat.BR)
+        return moment(b.date, DateTimeFormat.BR).diff(
+          moment(a.date, DateTimeFormat.BR)
         );
       });
       setReminders(response.schedules);
@@ -57,7 +57,9 @@ const Reminders = () => {
           {reminders?.map((reminder) => (
             <ReminderItem
               key={reminder.id}
-              date={moment(reminder.date, DateFormat.BR).format('DD/MM/YYYY')}
+              date={moment(reminder.date, DateTimeFormat.BR).format(
+                'DD/MM/YYYY HH:mm'
+              )}
               description={reminder.description}
               local={reminder.local}
             />
