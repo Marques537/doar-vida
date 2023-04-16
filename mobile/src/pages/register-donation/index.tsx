@@ -33,7 +33,7 @@ const RegisterDonation = () => {
   };
 
   const handleConfirm = (date: any) => {
-    setDate(moment(String(date)).format(DateFormat.BR));
+    setDate(moment(date).format(DateFormat.BR));
     setDatePickerVisibility(false);
   };
 
@@ -42,7 +42,7 @@ const RegisterDonation = () => {
       const response = await Api.createDonation(
         token,
         userId,
-        moment(date).format('YYYY/MM/DD'),
+        moment(date).format('yyyy/MM/DD'),
         place
       );
       if (response.donation_id) {

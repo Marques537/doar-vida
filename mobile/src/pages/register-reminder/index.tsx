@@ -32,7 +32,7 @@ const RegisterReminder = () => {
     navigation.goBack();
   };
   const handleConfirm = (date: any) => {
-    setDate(moment(String(date)).format(DateTimeFormat.BR));
+    setDate(moment(date).format(DateTimeFormat.BR));
     setDatePickerVisibility(false);
   };
 
@@ -41,7 +41,7 @@ const RegisterReminder = () => {
       const response = await Api.createReminder(
         token,
         userId,
-        moment(date).format('YYYY/MM/DD HH:mm:ss'),
+        moment(date).format('yyyy/MM/DD HH:mm'),
         place,
         description
       );
