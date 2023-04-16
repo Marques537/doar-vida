@@ -162,4 +162,24 @@ export default {
 
     return json;
   },
+
+  updateUserPassword: async (
+    token: string,
+    userId: string,
+    oldPassword: string,
+    newPassword: string
+  ) => {
+    const res = await fetch(`${BASE_API}/user/update/password`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'x-access-token': token,
+      },
+      body: JSON.stringify({ id: userId, oldPassword, newPassword }),
+    });
+    const json = await res.json();
+
+    return json;
+  },
 };

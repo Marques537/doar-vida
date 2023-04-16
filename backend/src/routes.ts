@@ -50,6 +50,11 @@ routes.post(
   Authenticate.ensureAuthenticated,
   userController.updateUser
 );
+routes.post(
+  '/user/update/password',
+  Authenticate.ensureAuthenticated,
+  userController.updatePassword
+);
 
 routes.post(
   '/donation',

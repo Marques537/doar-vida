@@ -11,6 +11,8 @@ export interface UserRepository {
   ): Promise<UserId>;
   selectUserById(userId: string): Promise<User>;
   updateUserNameById(userId: string, name: string): Promise<User>;
+  updateUserPasswordById(userId: string, newPassword: string): Promise<User>;
+  getUserByIdAndPassword(userId: string, password: string): Promise<UserId>;
 }
 export class UserRepositoryImpl implements UserRepository {
   async createUser(user: User): Promise<CreateUserDTO> {
@@ -35,11 +37,29 @@ export class UserRepositoryImpl implements UserRepository {
   }
 
   async updateUserNameById(userId: string, name: string): Promise<User> {
-    return knex('users').where('id', userId).update(
-      {
-        name,
-      },
-      ['name', 'email', 'gender']
-    );
+    return knex('users').where('id', userId).update({
+      name,
+    });
+  }
+
+  async getUserByIdAndPassword(
+    userId: string,
+    password: string
+  ): Promise<UserId> {
+    return knex
+      .select('id')
+      .from<Object>('users')
+      .first()
+      .where('id', userId)
+      .andWhere('password', password);
+  }
+
+  async updateUserPasswordById(
+    userId: string,
+    newPassword: string
+  ): Promise<User> {
+    return knex('users').where('id', userId).update({
+      password: newPassword,
+    });
   }
 }

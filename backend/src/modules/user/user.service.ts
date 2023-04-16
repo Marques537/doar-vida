@@ -5,12 +5,19 @@ import { CreatedUserResponse, CreateUserDTO } from './types/dto/createUser.dto';
 import { GetUserDTO, GetUserResponse } from './types/dto/getUser.dto';
 import { LoginUserDTO, LoginUserResponse } from './types/dto/loginUser.dto';
 import { UpdateUserDto, UpdateUserResponse } from './types/dto/updateUser.dto';
+import {
+  UpdateUserPasswordDto,
+  UpdateUserPasswordResponse,
+} from './types/dto/updateUserPassword.dto';
 import { UserRepository } from './user.repository';
 
 export interface UserService {
   create(user: CreateUserDTO): Promise<CreatedUserResponse | CustomError>;
   login(user: LoginUserDTO): Promise<LoginUserResponse>;
   getUser(user: GetUserDTO): Promise<GetUserResponse>;
+  updatePassword(
+    user: UpdateUserPasswordDto
+  ): Promise<UpdateUserPasswordResponse>;
 }
 
 @injectable()
@@ -73,6 +80,26 @@ export class UserServiceImpl implements UserService {
       };
     } else {
       return { message: 'user not found.' };
+    }
+  }
+  async updatePassword(
+    params: UpdateUserPasswordDto
+  ): Promise<UpdateUserPasswordResponse> {
+    const userId = await this.userRepository.getUserByIdAndPassword(
+      params.userId,
+      params.oldPassword
+    );
+    if (!userId) {
+      return { message: 'invalid password' };
+    }
+    const user = await this.userRepository.updateUserPasswordById(
+      params.userId,
+      params.newPassword
+    );
+    if (user) {
+      return { message: 'success' };
+    } else {
+      return { message: 'error to update user password' };
     }
   }
 }

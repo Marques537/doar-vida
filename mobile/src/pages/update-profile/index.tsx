@@ -31,6 +31,7 @@ const UpdateProfile = () => {
       const response = await Api.updateUserProfile(token, userId, name);
       if (response.name) {
         Alert.alert('Sucesso', 'Perfil atualizado', [{ text: 'OK' }]);
+        handleNavigateBack();
       } else {
         Alert.alert(
           'Erro',

@@ -81,5 +81,28 @@ class UserController {
       return response.status(401).json({ message: user.message }).end();
     }
   }
+
+  async updatePassword(request: Request, response: Response) {
+    const userService = container.resolve(UserServiceImpl);
+    const { id, newPassword, oldPassword } = request.body;
+
+    if (!id || !newPassword || !oldPassword) {
+      return response
+        .status(400)
+        .json({ message: 'userId, newPassword or oldPassword not provided.' });
+    }
+
+    const user = await userService.updatePassword({
+      userId: String(id),
+      oldPassword,
+      newPassword,
+    });
+
+    if (user.message == 'success') {
+      return response.status(201).json(user);
+    } else {
+      return response.status(401).json({ message: user.message }).end();
+    }
+  }
 }
 export default UserController;
