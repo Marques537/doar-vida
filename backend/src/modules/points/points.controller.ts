@@ -1,7 +1,7 @@
-import { Request, Response } from "express";
-import { container } from "tsyringe";
-import { CustomError } from "../../shared/CustomError";
-import { PointServiceImpl } from "./points.service";
+import { Request, Response } from 'express';
+import { container } from 'tsyringe';
+import { CustomError } from '../../shared/CustomError';
+import { PointServiceImpl } from './points.service';
 
 class PointsController {
   async show(request: Request, response: Response) {
@@ -12,7 +12,7 @@ class PointsController {
     if (!point) {
       return response
         .status(400)
-        .json({ message: "Collection post not found" });
+        .json({ message: 'Collection post not found' });
     }
     return response.json(point);
   }
@@ -27,12 +27,12 @@ class PointsController {
       longitude,
       city,
       uf,
-      street,
-      number,
+      address,
+      phoneNumber,
     } = request.body;
 
     const point = {
-      image: "no-image", //need modify during frontend development
+      image: undefined, //need modify during frontend development
       name,
       email,
       whatsapp,
@@ -40,12 +40,11 @@ class PointsController {
       longitude,
       city,
       uf,
-      street,
-      number,
+      address,
+      phoneNumber,
     };
 
     if (
-      point.image === undefined ||
       point.name === undefined ||
       point.email === undefined ||
       point.whatsapp === undefined ||
@@ -53,12 +52,11 @@ class PointsController {
       point.longitude === undefined ||
       point.city === undefined ||
       point.uf === undefined ||
-      point.street === undefined ||
-      point.number === undefined
+      point.address === undefined
     ) {
       return response
         .status(400)
-        .json({ message: "another property is not provided" });
+        .json({ message: 'another property is not provided' });
     }
 
     const pointId = await pointService.createPoint(point);

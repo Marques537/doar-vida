@@ -8,6 +8,7 @@ import { logout } from '../../reducers/auth.reducer';
 export default function Profile() {
   const navigation = useNavigation();
   const dispatch = useDispatch();
+
   function handleNavigateToChangePassword() {
     navigation.navigate('ChangePassword' as never);
   }

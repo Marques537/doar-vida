@@ -39,7 +39,8 @@
     "react-native-web": "~0.18.11",
     "react-redux": "^8.0.5",
     "redux": "^4.2.1",
-    "styled-components": "^5.3.3"
+    "styled-components": "^5.3.3",
+    "expo-location": "~15.1.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

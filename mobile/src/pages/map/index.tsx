@@ -1,47 +1,126 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Constants from 'expo-constants';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  Alert,
+  ActivityIndicator,
+} from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import { useNavigation } from '@react-navigation/native';
+import * as Location from 'expo-location';
+import Api from '../../services/backend-api';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/store';
+
+export interface Point {
+  id: number;
+  name: string;
+  email: string;
+  whatsapp: string;
+  latitude: number;
+  longitude: number;
+  city: string;
+  uf: string;
+  address: string;
+  phone_number: string;
+  image?: string;
+}
 
 const Points = () => {
-  const initialRegion = {
-    latitude:-22.8424632,
-    longitude: -47.2963221,
-    latitudeDelta: 0.014, 
-    longitudeDelta: 0.014
-  }
+  const [initialPosition, setInitialPosition] = useState<[number, number]>([
+    0, 0,
+  ]);
+  const { token } = useSelector((state: RootState) => state.auth);
+  const [points, setPoints] = useState<Point[]>([]);
   const navigation = useNavigation();
 
-    function handleNavigateToDetail(){
-      navigation.navigate('Detail' as never);
+  useEffect(() => {
+    async function loadPosition() {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        Alert.alert(
+          'Oooops...',
+          'Precisamos de sua permissão para obter a localização'
+        );
+      }
+
+      const location = await Location.getCurrentPositionAsync();
+
+      const { latitude, longitude } = location.coords;
+      setInitialPosition([latitude, longitude]);
     }
+
+    loadPosition();
+  }, []);
+
+  useEffect(() => {
+    //TODO: (marques537) get user city and uf and send to backend
+    Api.getPoints(token, 'SP', 'São Paulo').then((response) => {
+      setPoints(response.points);
+    });
+  }, []);
+
+  const initialRegion = {
+    latitude: initialPosition[0],
+    longitude: initialPosition[1],
+    latitudeDelta: 0.014,
+    longitudeDelta: 0.014,
+  };
+
+  function handleNavigateToDetail(point: Point) {
+    navigation.navigate('Detail' as never, point as never);
+  }
 
   return (
     <View style={styles.container}>
-
-      <Text style={styles.description}>Olá, encontre no mapa postos de coleta de sangue!</Text>
+      <Text style={styles.description}>
+        Olá, encontre no mapa postos de coleta de sangue!
+      </Text>
       <View style={styles.mapContainer}>
-        <MapView 
-          style={styles.map}
-          initialRegion={initialRegion}
-        >
-          <Marker 
-            style={styles.mapMarker}
-            onPress={handleNavigateToDetail}
-            coordinate={initialRegion}>
-              <View style={styles.mapMarkerContainer}>
-                <Image 
-                  style={styles.mapMarkerImage}
-                  source={{uri:'https://media-exp1.licdn.com/dms/image/C4D1BAQGcPOMzbQnCQw/company-background_10000/0/1577704279768?e=2147483647&v=beta&t=NwQIPKjCQitZ3qUjZmGoXJwLPnKN2hWmocHAbGT2D4s'}}></Image>
-                <Text style={styles.mapMarkerTitle}>Hospital Estadual de Sumaré</Text>
-              </View>
-          </Marker>
-        </MapView>
+        {initialPosition[0] !== 0 ? (
+          <MapView
+            style={styles.map}
+            loadingEnabled={initialPosition[0] == 0}
+            initialRegion={initialRegion}
+          >
+            {points.map((point) => (
+              <Marker
+                key={String(point.id)}
+                style={styles.mapMarker}
+                onPress={() => handleNavigateToDetail(point)}
+                coordinate={{
+                  latitude: point.latitude,
+                  longitude: point.longitude,
+                }}
+              >
+                <View style={styles.mapMarkerContainer}>
+                  <Image
+                    style={styles.mapMarkerImage}
+                    source={
+                      point.image
+                        ? {
+                            uri: point.image,
+                          }
+                        : require('../../assets/gota-de-sangue.png')
+                    }
+                  />
+                  <Text style={styles.mapMarkerTitle}>{point.name}</Text>
+                </View>
+              </Marker>
+            ))}
+          </MapView>
+        ) : (
+          <View style={styles.loading}>
+            <ActivityIndicator color="#FD4872" size="large" animating={true} />
+          </View>
+        )}
       </View>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -65,33 +144,38 @@ const styles = StyleSheet.create({
   map: {
     width: '100%',
     height: '100%',
-  }, 
+  },
   mapMarker: {
-    width: 90,
-    height: 80, 
+    width: 70,
+    height: 60,
   },
   mapMarkerImage: {
-    width: 90,
-    height: 45,
-    resizeMode: 'cover',
+    width: 70,
+    height: 30,
+    resizeMode: 'contain',
+    backgroundColor: '#FFF',
   },
   mapMarkerTitle: {
     flex: 1,
     fontFamily: 'Roboto_400Regular',
     color: '#FFF',
     fontSize: 13,
-    lineHeight: 23,
-  },  
+    lineHeight: 10,
+    paddingTop: 5,
+  },
   mapMarkerContainer: {
-    width: 90,
-    height: 70,
+    width: 70,
+    height: 60,
     backgroundColor: '#FD4872',
     flexDirection: 'column',
     borderRadius: 8,
     overflow: 'hidden',
-    alignItems: 'center'
+    alignItems: 'center',
   },
 
-
-}); 
+  loading: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+});
 export default Points;
