@@ -1,5 +1,5 @@
-import knex from "../database/connection";
-import { Schedule } from "./types/schedule.interface";
+import knex from '../database/connection';
+import { Schedule } from './types/schedule.interface';
 
 export interface ScheduleRepository {
   showAllByUserId(userId: string): Promise<Schedule[]>;
@@ -9,12 +9,15 @@ export interface ScheduleRepository {
 
 export class ScheduleRepositoryImpl {
   showAllByUserId(userId: string): Promise<Schedule[]> {
-    return knex("schedules").where("user_id", userId);
+    return knex('schedules').where('user_id', userId);
   }
   showAllByUserIdAndDate(userId: string, date: string): Promise<Schedule[]> {
-    return knex("schedules").where("user_id", userId).where("date", ">", date);
+    return knex('schedules')
+      .where('user_id', userId)
+      .where('date', '>', date)
+      .orderBy('date');
   }
   createSchedule(schedule: Schedule): Promise<number[]> {
-    return knex("schedules").insert(schedule);
+    return knex('schedules').insert(schedule).returning(['id']);
   }
 }

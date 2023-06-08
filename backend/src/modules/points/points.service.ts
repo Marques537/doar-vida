@@ -1,9 +1,9 @@
-import { inject, injectable } from "tsyringe";
-import { CustomError } from "../../shared/CustomError";
-import { PointRepository } from "./points.repository";
-import { CreatePointDto } from "./types/dto/createPoint.dto";
-import { FindPointsDto } from "./types/dto/findPoints.dto";
-import { Point } from "./types/point.interface";
+import { inject, injectable } from 'tsyringe';
+import { CustomError } from '../../shared/CustomError';
+import { PointRepository } from './points.repository';
+import { CreatePointDto } from './types/dto/createPoint.dto';
+import { FindPointsDto } from './types/dto/findPoints.dto';
+import { Point } from './types/point.interface';
 
 export interface PointService {
   showById(pointId: string): Promise<Point>;
@@ -14,7 +14,7 @@ export interface PointService {
 @injectable()
 export class PointServiceImpl implements PointService {
   constructor(
-    @inject("PointRepository")
+    @inject('PointRepository')
     private pointRepository: PointRepository
   ) {}
 
@@ -25,7 +25,7 @@ export class PointServiceImpl implements PointService {
     try {
       return this.pointRepository.create(point);
     } catch (error: any) {
-      throw new CustomError("Error to create point", error);
+      throw new CustomError('Error to create point', error);
     }
   }
   async findPointsByUFAndCity(location: FindPointsDto): Promise<Point[]> {

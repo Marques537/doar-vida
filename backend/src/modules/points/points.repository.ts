@@ -40,7 +40,7 @@ export class PointRepositoryImpl implements PointRepository {
       phone_number: phoneNumber,
     };
 
-    const id = await knex('points').insert(PointRecord);
+    const id = await knex('points').insert(PointRecord).returning('id');
     return id[0];
   }
   async findPointsByUFAndCity(location: Point): Promise<Point[]> {

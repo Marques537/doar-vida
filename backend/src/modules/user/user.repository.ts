@@ -16,7 +16,9 @@ export interface UserRepository {
 }
 export class UserRepositoryImpl implements UserRepository {
   async createUser(user: User): Promise<CreateUserDTO> {
-    return knex('users').insert(user);
+    return knex('users')
+      .insert(user)
+      .returning(['name', 'email', 'password', 'gender']);
   }
   async selectUserByEmail(email: string): Promise<User[]> {
     return knex.select('id').from<Object>('users').where('email', email);
@@ -58,8 +60,11 @@ export class UserRepositoryImpl implements UserRepository {
     userId: string,
     newPassword: string
   ): Promise<User> {
-    return knex('users').where('id', userId).update({
-      password: newPassword,
-    });
+    return knex('users')
+      .where('id', userId)
+      .update({
+        password: newPassword,
+      })
+      .returning(['name', 'email', 'password', 'gender']);
   }
 }

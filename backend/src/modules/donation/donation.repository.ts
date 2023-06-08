@@ -12,7 +12,7 @@ export class DonationRepositoryImpl implements DonationRepository {
     return knex('donations').where('user_id', userId);
   }
   async createDonation(donation: CreateDonationDto): Promise<number> {
-    const id = await knex('donations').insert(donation);
+    const id = await knex('donations').insert(donation).returning('id');
     return id[0];
   }
 }
