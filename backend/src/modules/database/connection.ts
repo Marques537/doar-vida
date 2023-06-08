@@ -1,12 +1,17 @@
 import knex from 'knex';
-import path from 'path';
+import 'dotenv/config';
 
-const connection = knex({
-  client: 'sqlite3',
+const pg = knex({
+  client: 'pg',
   connection: {
-    filename: path.resolve(__dirname, 'database.sqlite'),
+    host: process.env.DB_HOST,
+    port: Number(process.env.DB_PORT),
+    user: process.env.POSTGRES_USER,
+    password: process.env.POSTGRES_PASSWORD,
+    database: process.env.POSTGRES_DB,
   },
+  searchPath: ['knex', 'public'],
   useNullAsDefault: true,
 });
 
-export default connection;
+export default pg;
