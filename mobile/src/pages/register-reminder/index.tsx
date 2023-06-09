@@ -46,6 +46,9 @@ const RegisterReminder = () => {
         description
       );
       if (response.id) {
+        setDate('');
+        setPlace('');
+        setDescription(undefined);
         Alert.alert('Sucesso', 'Lembrete registrado', [{ text: 'OK' }]);
       } else {
         Alert.alert(

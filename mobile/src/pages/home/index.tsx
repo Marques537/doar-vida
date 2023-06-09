@@ -37,7 +37,7 @@ enum Genders {
 
 export default function Home() {
   const { token, userId } = useSelector((state: RootState) => state.auth);
-  const [user, setUser] = useState<User>();
+  const user = useSelector((state: RootState) => state.user);
   const [donations, setDonations] = useState<Donation[]>([]);
   const [schedules, setSchedules] = useState<Schedule[]>([]);
 
@@ -56,9 +56,6 @@ export default function Home() {
   }
 
   useEffect(() => {
-    Api.getUser(token, userId).then((response) => {
-      setUser(response);
-    });
     Api.getDonations(token, userId).then((response) => {
       setDonations(response.donations);
     });
@@ -67,7 +64,7 @@ export default function Home() {
         setSchedules(response.schedules);
       }
     );
-  }, []);
+  }, [user]);
 
   function donationStatus() {
     const maxDonationCount = user?.gender == Genders.MALE ? 4 : 3;
@@ -197,7 +194,7 @@ export default function Home() {
         <View style={styles.view}>
           <Text style={styles.title}>Doações realizadas</Text>
           <Text style={styles.description}>{donations.length || 0}</Text>
-          {peopleHelpCount}
+          {peopleHelpCount()}
         </View>
         <View style={styles.view}>
           <Text style={styles.title}>Próxima doação</Text>

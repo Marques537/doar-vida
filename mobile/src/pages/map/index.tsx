@@ -63,13 +63,6 @@ const Points = () => {
     });
   }, []);
 
-  const initialRegion = {
-    latitude: initialPosition[0],
-    longitude: initialPosition[1],
-    latitudeDelta: 0.014,
-    longitudeDelta: 0.014,
-  };
-
   function handleNavigateToDetail(point: Point) {
     navigation.navigate('Detail' as never, point as never);
   }
@@ -80,11 +73,16 @@ const Points = () => {
         Olá, encontre no mapa postos de coleta de sangue!
       </Text>
       <View style={styles.mapContainer}>
-        {initialPosition[0] !== 0 ? (
+        {initialPosition[0] != 0 ? (
           <MapView
             style={styles.map}
             loadingEnabled={initialPosition[0] == 0}
-            initialRegion={initialRegion}
+            initialRegion={{
+              latitude: initialPosition[0],
+              longitude: initialPosition[1],
+              latitudeDelta: 0.014,
+              longitudeDelta: 0.014,
+            }}
           >
             {points.map((point) => (
               <Marker

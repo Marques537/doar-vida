@@ -46,6 +46,8 @@ const RegisterDonation = () => {
         place
       );
       if (response.donation_id) {
+        setDate('');
+        setPlace('');
         Alert.alert('Sucesso', 'Doação registrada', [{ text: 'OK' }]);
       } else {
         Alert.alert(

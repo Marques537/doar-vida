@@ -4,6 +4,7 @@ import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { logout } from '../../reducers/auth.reducer';
+import { resetState } from '../../reducers/user.reducer';
 
 export default function Profile() {
   const navigation = useNavigation();
@@ -17,6 +18,7 @@ export default function Profile() {
   }
   const navigateToLogin = async () => {
     dispatch(logout());
+    dispatch(resetState());
     navigation.reset({
       routes: [{ name: 'Login' }] as any,
     });

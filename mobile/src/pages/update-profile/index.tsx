@@ -14,10 +14,12 @@ import { useNavigation } from '@react-navigation/native';
 import { RectButton } from 'react-native-gesture-handler';
 import Constants from 'expo-constants';
 import Api from '../../services/backend-api';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
+import { updateUserName } from '../../reducers/user.reducer';
 
 const UpdateProfile = () => {
+  const dispatch = useDispatch();
   const { token, userId } = useSelector((state: RootState) => state.auth);
   const [name, setName] = useState('');
 
@@ -31,6 +33,7 @@ const UpdateProfile = () => {
       const response = await Api.updateUserProfile(token, userId, name);
       if (response.name) {
         Alert.alert('Sucesso', 'Perfil atualizado', [{ text: 'OK' }]);
+        dispatch(updateUserName({ name }));
         handleNavigateBack();
       } else {
         Alert.alert(

@@ -14,12 +14,18 @@ import { useNavigation } from '@react-navigation/native';
 import Api from '../../services/backend-api';
 import { useDispatch } from 'react-redux';
 import { login } from '../../reducers/auth.reducer';
+import { setUser } from '../../reducers/user.reducer';
 
 const Login = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const loadUser = async (token: string, userId: string) => {
+    const response = await Api.getUser(token, userId);
+    dispatch(setUser(response));
+  };
 
   const navigateToHome = async () => {
     const response = await Api.signIn(email, password);
@@ -28,7 +34,10 @@ const Login = () => {
         { text: 'OK' },
       ]);
     }
+
     dispatch(login({ token: response.token, id: response.id }));
+    await loadUser(response.token, response.id);
+
     navigation.reset({
       routes: [{ name: 'MainTab' }] as any,
     });
