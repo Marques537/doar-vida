@@ -78,9 +78,13 @@ class PointsController {
       city: String(city),
       uf: String(uf),
     };
-
-    const points = await pointService.findPointsByUFAndCity(location);
-    return response.json({ points });
+    if (city) {
+      const points = await pointService.findPointsByUFAndCity(location);
+      return response.json({ points });
+    } else {
+      const points = await pointService.findPointsByUF(String(uf));
+      return response.json({ points });
+    }
   }
 }
 

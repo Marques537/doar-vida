@@ -7,6 +7,7 @@ export interface PointRepository {
   showById(pointId: string): Promise<Point>;
   create(point: CreatePointDto): Promise<number>;
   findPointsByUFAndCity(location: FindPointsDto): Promise<Point[]>;
+  findPointsByUF(uf: string): Promise<Point[]>;
 }
 
 export class PointRepositoryImpl implements PointRepository {
@@ -47,6 +48,12 @@ export class PointRepositoryImpl implements PointRepository {
     return knex('points')
       .whereRaw('LOWER(city) = ?', location.city.toLowerCase())
       .whereRaw('LOWER(uf) = ?', location.uf.toLowerCase())
+      .distinct();
+  }
+
+  async findPointsByUF(uf: string): Promise<Point[]> {
+    return knex('points')
+      .whereRaw('LOWER(uf) = ?', uf.toLowerCase())
       .distinct();
   }
 }

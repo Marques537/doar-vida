@@ -31,4 +31,7 @@ export class PointServiceImpl implements PointService {
   async findPointsByUFAndCity(location: FindPointsDto): Promise<Point[]> {
     return this.pointRepository.findPointsByUFAndCity(location);
   }
+  async findPointsByUF(uf: string): Promise<Point[]> {
+    return this.pointRepository.findPointsByUF(uf);
+  }
 }
