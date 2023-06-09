@@ -2,13 +2,15 @@ import { useNavigation } from '@react-navigation/native';
 import Constants from 'expo-constants';
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../reducers/auth.reducer';
 import { resetState } from '../../reducers/user.reducer';
+import { RootState } from '../../store/store';
 
 export default function Profile() {
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const user = useSelector((state: RootState) => state.user);
 
   function handleNavigateToChangePassword() {
     navigation.navigate('ChangePassword' as never);
@@ -30,10 +32,10 @@ export default function Profile() {
       </View>
       <View style={styles.container}>
         <Text style={styles.informationTitle}>Nome</Text>
-        <Text style={styles.description}>Matheus Marques da Costa Silva</Text>
+        <Text style={styles.description}>{user.name}</Text>
 
         <Text style={styles.informationTitle}>E-mail</Text>
-        <Text style={styles.description}>matheusm537@gmail.com</Text>
+        <Text style={styles.description}>{user.email}</Text>
 
         <Text
           style={styles.informationTitle}
