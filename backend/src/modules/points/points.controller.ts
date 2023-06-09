@@ -29,10 +29,11 @@ class PointsController {
       uf,
       address,
       phoneNumber,
+      image,
     } = request.body;
 
     const point = {
-      image: undefined, //need modify during frontend development
+      image,
       name,
       email,
       whatsapp,

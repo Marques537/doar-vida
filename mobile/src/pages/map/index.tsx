@@ -97,13 +97,7 @@ const Points = () => {
                 <View style={styles.mapMarkerContainer}>
                   <Image
                     style={styles.mapMarkerImage}
-                    source={
-                      point.image
-                        ? {
-                            uri: point.image,
-                          }
-                        : require('../../assets/gota-de-sangue.png')
-                    }
+                    source={require('../../assets/gota-de-sangue.png')}
                   />
                   <Text style={styles.mapMarkerTitle}>{point.name}</Text>
                 </View>

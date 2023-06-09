@@ -8,16 +8,32 @@ import {
   Text,
   SafeAreaView,
   Platform,
+  Linking,
 } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { RectButton } from 'react-native-gesture-handler';
 import Constants from 'expo-constants';
 import { Point } from '../map';
+import * as Mailcomposer from 'expo-mail-composer';
 
 const Detail = () => {
   const [point, setPoint] = useState<Point>({} as Point);
   const navigation = useNavigation();
   const route = useRoute();
+
+  const message = `Olá ${point.name}, estou entrando em contato pois gostaria de doar sangue`;
+
+  function sendWhatsapp() {
+    Linking.openURL(`whatsapp://send?phone=${point.whatsapp}&text=${message}`);
+  }
+
+  function sendMail() {
+    Mailcomposer.composeAsync({
+      subject: `Doacão de sangue - Doar Vida`,
+      recipients: [point.email],
+      body: message,
+    });
+  }
 
   useEffect(() => {
     const pointInfo = route.params as Point;
@@ -70,12 +86,12 @@ const Detail = () => {
         </View>
       </View>
       <View style={styles.footer}>
-        <RectButton style={styles.button} onPress={() => {}}>
+        <RectButton style={styles.button} onPress={sendWhatsapp}>
           <FontAwesome name="whatsapp" size={20} color="#FFF" />
           <Text style={styles.buttonText}>Whatsapp</Text>
         </RectButton>
 
-        <RectButton style={styles.button} onPress={() => {}}>
+        <RectButton style={styles.button} onPress={sendMail}>
           <Icon name="mail" size={20} color="#FFF" />
           <Text style={styles.buttonText}>E-mail</Text>
         </RectButton>
