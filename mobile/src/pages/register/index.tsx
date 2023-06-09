@@ -94,19 +94,7 @@ const Register = () => {
             value={email}
             onChangeText={setEmail}
           />
-          <Text style={styles.description}>Gênero</Text>
-          <DropDownPicker
-            style={styles.input}
-            textStyle={{ fontFamily: 'Roboto_400Regular', fontSize: 16 }}
-            open={open}
-            value={gender}
-            items={items}
-            setOpen={setOpen}
-            setValue={setGender}
-            setItems={setItems}
-            language={'PT'}
-            placeholder={'selecione um gênero'}
-          />
+
           <Text style={styles.description}>Senha</Text>
           <TextInput
             secureTextEntry={true}
@@ -122,6 +110,19 @@ const Register = () => {
             autoCorrect={false}
             value={repeatPassword}
             onChangeText={setRepeatPassword}
+          />
+          <Text style={styles.description}>Gênero</Text>
+          <DropDownPicker
+            style={styles.input}
+            textStyle={{ fontFamily: 'Roboto_400Regular', fontSize: 16 }}
+            open={open}
+            value={gender}
+            items={items}
+            setOpen={setOpen}
+            setValue={setGender}
+            setItems={setItems}
+            language={'PT'}
+            placeholder={'selecione um gênero'}
           />
           <TouchableOpacity onPress={tryRegister} style={styles.btnSubmit}>
             <Text style={styles.submitText}>Cadastrar</Text>

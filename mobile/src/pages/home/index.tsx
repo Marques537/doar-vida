@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  RefreshControl,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import Constants from 'expo-constants';
 import StepIndicator from 'react-native-step-indicator';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -40,6 +46,7 @@ export default function Home() {
   const user = useSelector((state: RootState) => state.user);
   const [donations, setDonations] = useState<Donation[]>([]);
   const [schedules, setSchedules] = useState<Schedule[]>([]);
+  const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
 
   const navigation = useNavigation();
   function handleNavigateToRegisterReminder() {
@@ -54,6 +61,19 @@ export default function Home() {
   function handleNavigateToReminders() {
     navigation.navigate('Reminders' as never);
   }
+
+  const refresh = () => {
+    setIsRefreshing(true);
+    Api.getDonations(token, userId).then((response) => {
+      setDonations(response.donations);
+    });
+    Api.getScheduleByDate(token, userId, moment().format(DateFormat.BR)).then(
+      (response) => {
+        setSchedules(response.schedules);
+      }
+    );
+    setIsRefreshing(false);
+  };
 
   useEffect(() => {
     Api.getDonations(token, userId).then((response) => {
@@ -97,7 +117,7 @@ export default function Home() {
     });
     const lastDonation = donations?.slice(-1);
 
-    if (lastDonation.length) {
+    if (lastDonation && lastDonation?.length) {
       const days = moment().diff(
         moment(lastDonation[0]?.date, DateFormat.BR),
         'days'
@@ -126,101 +146,109 @@ export default function Home() {
 
   return (
     <>
-      <View style={styles.containerHeader}>
-        <Text style={styles.title}>Olá, {user?.name?.split(' ')?.[0]}</Text>
-        {calculateTimeToDonate()}
-      </View>
-
-      <View style={styles.itemsContainer}>
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={{ paddingHorizontal: 20 }}
-        >
-          <TouchableOpacity
-            style={styles.item}
-            onPress={handleNavigateToRegisterReminder}
-          >
-            <Text style={styles.textItem}>Criar lembrete</Text>
-            <View style={styles.icons}>
-              <Icon name="plus" color="#FD4872" size={23} />
-              <Icon name="bell" color="#FD4872" size={24} />
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.item}
-            onPress={handleNavigateToRegisterDonation}
-          >
-            <Text style={styles.textItem}>Registrar doação</Text>
-            <View style={styles.icons}>
-              <Icon name="plus" color="#FD4872" size={23} />
-              <Icon name="droplet" color="#FD4872" size={24} />
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.item}
-            onPress={handleNavigateToDonationHistory}
-          >
-            <Text style={styles.textItem}>Histórico de doações</Text>
-            <Icon name="archive" color="#FD4872" size={24} />
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.item}
-            onPress={handleNavigateToReminders}
-          >
-            <Text style={styles.textItem}>Lembretes</Text>
-            <View style={styles.icons}>
-              <Icon
-                style={{ transform: [{ rotateZ: '15deg' }] }}
-                name="bell"
-                color="#FD4872"
-                size={22}
-              />
-              <Icon name="bell" color="#FD4872" size={24} />
-              <Icon
-                style={{ transform: [{ rotateZ: '-15deg' }] }}
-                name="bell"
-                color="#FD4872"
-                size={22}
-              />
-            </View>
-          </TouchableOpacity>
-        </ScrollView>
-      </View>
-      <View style={styles.container}>
-        <View style={styles.view}>
-          <Text style={styles.title}>Doações realizadas</Text>
-          <Text style={styles.description}>{donations.length || 0}</Text>
-          {peopleHelpCount()}
-        </View>
-        <View style={styles.view}>
-          <Text style={styles.title}>Próxima doação</Text>
-          <Text style={styles.description}>
-            {schedules[0]?.date
-              ? moment(schedules[0]?.date, DateFormat.BR).format('DD/MM/yyyy')
-              : 'Agendamento não registrado'}
-          </Text>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={isRefreshing} onRefresh={refresh} />
+        }
+      >
+        <View style={styles.containerHeader}>
+          <Text style={styles.title}>Olá, {user.name.split(' ')?.[0]}</Text>
+          {calculateTimeToDonate()}
         </View>
 
-        <View style={styles.view}>
-          <Text style={styles.stepIndicator}>Doações dos últimos 12 meses</Text>
-          <StepIndicator
-            customStyles={stepIndicatorCustomStyles}
-            currentPosition={
-              donations?.filter(
-                (donation) =>
-                  moment(donation?.date, DateFormat.BR) >=
-                  moment().add(-1, 'year')
-              ).length - 1
-            }
-            stepCount={user?.gender == Genders.MALE ? 4 : 3}
-          />
-          {donationStatus()}
+        <View style={styles.itemsContainer}>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{ paddingHorizontal: 20 }}
+          >
+            <TouchableOpacity
+              style={styles.item}
+              onPress={handleNavigateToRegisterReminder}
+            >
+              <Text style={styles.textItem}>Criar lembrete</Text>
+              <View style={styles.icons}>
+                <Icon name="plus" color="#FD4872" size={23} />
+                <Icon name="bell" color="#FD4872" size={24} />
+              </View>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.item}
+              onPress={handleNavigateToRegisterDonation}
+            >
+              <Text style={styles.textItem}>Registrar doação</Text>
+              <View style={styles.icons}>
+                <Icon name="plus" color="#FD4872" size={23} />
+                <Icon name="droplet" color="#FD4872" size={24} />
+              </View>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.item}
+              onPress={handleNavigateToDonationHistory}
+            >
+              <Text style={styles.textItem}>Histórico de doações</Text>
+              <Icon name="archive" color="#FD4872" size={24} />
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.item}
+              onPress={handleNavigateToReminders}
+            >
+              <Text style={styles.textItem}>Lembretes</Text>
+              <View style={styles.icons}>
+                <Icon
+                  style={{ transform: [{ rotateZ: '15deg' }] }}
+                  name="bell"
+                  color="#FD4872"
+                  size={22}
+                />
+                <Icon name="bell" color="#FD4872" size={24} />
+                <Icon
+                  style={{ transform: [{ rotateZ: '-15deg' }] }}
+                  name="bell"
+                  color="#FD4872"
+                  size={22}
+                />
+              </View>
+            </TouchableOpacity>
+          </ScrollView>
         </View>
-      </View>
+        <View style={styles.container}>
+          <View style={styles.view}>
+            <Text style={styles.title}>Doações realizadas</Text>
+            <Text style={styles.description}>{donations.length || 0}</Text>
+            {peopleHelpCount()}
+          </View>
+          <View style={styles.view}>
+            <Text style={styles.title}>Próxima doação</Text>
+            <Text style={styles.description}>
+              {schedules[0]?.date
+                ? moment(schedules[0]?.date, DateFormat.BR).format('DD/MM/yyyy')
+                : 'Agendamento não registrado'}
+            </Text>
+          </View>
+
+          <View style={styles.view}>
+            <Text style={styles.stepIndicator}>
+              Doações dos últimos 12 meses
+            </Text>
+            <StepIndicator
+              customStyles={stepIndicatorCustomStyles}
+              currentPosition={
+                donations?.filter(
+                  (donation) =>
+                    moment(donation?.date, DateFormat.BR) >=
+                    moment().add(-1, 'year')
+                ).length - 1
+              }
+              stepCount={user?.gender == Genders.MALE ? 4 : 3}
+            />
+            {donationStatus()}
+          </View>
+        </View>
+      </ScrollView>
     </>
   );
 }

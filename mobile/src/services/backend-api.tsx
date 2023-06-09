@@ -1,4 +1,4 @@
-const BASE_API = 'http://172.24.2.248:3333';
+const BASE_API = 'http://172.21.245.102:3333';
 
 export default {
   checkToken: async (token: string) => {
@@ -89,7 +89,6 @@ export default {
       }
     );
     const json = await res.json();
-
     return json;
   },
 
@@ -183,11 +182,10 @@ export default {
     return json;
   },
 
-  getPoints: async (token: string, uf: string, city: string) => {
+  getPoints: async (token: string, uf: string, city?: string) => {
     const res = await fetch(
       `${BASE_API}/points?` +
         new URLSearchParams({
-          city,
           uf,
         }),
       {

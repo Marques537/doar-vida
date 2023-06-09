@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import Constants from 'expo-constants';
 import {
   StyleSheet,
@@ -48,7 +48,6 @@ const Points = () => {
       }
 
       const location = await Location.getCurrentPositionAsync();
-
       const { latitude, longitude } = location.coords;
       setInitialPosition([latitude, longitude]);
     }
@@ -58,7 +57,7 @@ const Points = () => {
 
   useEffect(() => {
     //TODO: (marques537) get user city and uf and send to backend
-    Api.getPoints(token, 'SP', 'São Paulo').then((response) => {
+    Api.getPoints(token, 'SP', undefined).then((response) => {
       setPoints(response.points);
     });
   }, []);
@@ -106,6 +105,8 @@ const Points = () => {
           </MapView>
         ) : (
           <View style={styles.loading}>
+            {/* to force useEffect render */}
+            <Text style={{ opacity: 0 }}>{initialPosition[0]}</Text>
             <ActivityIndicator color="#FD4872" size="large" animating={true} />
           </View>
         )}
